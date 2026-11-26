@@ -27,12 +27,15 @@
   "use strict";
 
   var KEY = "abslab.check.v1";
-  var MODS = ["pa", "pe", "m1"];
+  var MODS = ["pa", "pe", "m1", "m2", "cb", "cc"];
   // 模块的名字和「回到实验页」的地址（电学实验台的深链 #3、#13 由实验台自己处理）
   var MOD_INFO = {
     pa: { subject: "物理", name: "小灯泡与滑动变阻器的 I-U 图像", page: "physics/circuits-lab.html#3", lab: "电学实验台 3 号模块" },
     pe: { subject: "物理", name: "传感器：风速仪、电子秤等", page: "physics/circuits-lab.html#13", lab: "电学实验台 13 号模块" },
-    m1: { subject: "数学", name: "动点与函数图象", page: "math/moving-point.html", lab: "动点与函数图象" }
+    m1: { subject: "数学", name: "动点与函数图象", page: "math/moving-point.html", lab: "动点与函数图象" },
+    m2: { subject: "数学", name: "二次函数", page: "math/quadratic.html", lab: "二次函数实验室" },
+    cb: { subject: "化学", name: "溶解度曲线", page: "chemistry/solubility.html", lab: "溶解度曲线" },
+    cc: { subject: "化学", name: "反应后溶质成分", page: "chemistry/solute.html", lab: "反应后溶质成分" }
   };
   var T_NAME = { pre: "前测", post: "后测" };
   var CF_NAME = { sure: "有把握", unsure: "没把握" };

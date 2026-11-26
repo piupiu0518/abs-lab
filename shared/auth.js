@@ -131,6 +131,9 @@
       chem_neut_tasks: { drip: false, jump: false, indicator: false },
       bio_micro_tasks: { focus_low: false, high_mag: false, animal_cell: false, organelle: false },
       math_mpoint_tasks: { rect: false, pq: false, time: false },
+      math_quad_tasks: { vertex: false, interval: false, abc: false },
+      chem_solub_tasks: { cool: false, compare: false, nacl: false },
+      chem_solute_tasks: { curve: false, spoil: false },
       bridged: {}
     };
   }
@@ -522,6 +525,15 @@
       var mpointTasks = data.math_mpoint_tasks || {};
       var mpointDone = ["rect", "pq", "time"].filter(function (k) { return !!mpointTasks[k]; }).length;
 
+      var quadTasks = data.math_quad_tasks || {};
+      var quadDone = ["vertex", "interval", "abc"].filter(function (k) { return !!quadTasks[k]; }).length;
+
+      var solubTasks = data.chem_solub_tasks || {};
+      var solubDone = ["cool", "compare", "nacl"].filter(function (k) { return !!solubTasks[k]; }).length;
+
+      var soluteTasks = data.chem_solute_tasks || {};
+      var soluteDone = ["curve", "spoil"].filter(function (k) { return !!soluteTasks[k]; }).length;
+
       return {
         username: bucket.username,
         cloud: cloudState.enabled && Boolean(getSessionToken()),
@@ -539,6 +551,12 @@
         bioTotal: 4,
         mpointDone: mpointDone,
         mpointTotal: 3,
+        quadDone: quadDone,
+        quadTotal: 3,
+        solubDone: solubDone,
+        solubTotal: 3,
+        soluteDone: soluteDone,
+        soluteTotal: 2,
         updatedAt: data.updatedAt || null
       };
     },

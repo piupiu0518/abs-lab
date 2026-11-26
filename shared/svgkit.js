@@ -406,7 +406,11 @@
   function textW(s, fs) {
     s = String(s == null ? "" : s);
     var w = 0;
-    for (var i = 0; i < s.length; i++) w += s.charCodeAt(i) >= 0x2e80 ? fs : 0.6 * fs;
+    // 中日韩文字按全角；「℃」这类字母式符号（U+2100～214F）字形也接近全角，按半角估会把坐标轴名截掉一截
+    for (var i = 0; i < s.length; i++) {
+      var c = s.charCodeAt(i);
+      w += c >= 0x2e80 || (c >= 0x2100 && c <= 0x214f) ? fs : 0.6 * fs;
+    }
     return w;
   }
   function colorOf(o, def) {

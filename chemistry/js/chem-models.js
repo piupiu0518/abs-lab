@@ -92,7 +92,8 @@
     W = Math.max(0, num(W, 100)); m = Math.max(0, num(m, 0)); eps = eps == null ? 1e-6 : eps;
     var S = solubility(sub, T), per100 = W > 0 ? m * 100 / W : Infinity;
     var status = per100 < S - eps ? "unsat" : per100 <= S + eps ? "sat" : "crystal";
-    var precipitate = status === "crystal" ? (per100 - S) * W / 100 : 0;
+    // 没有水时（W = 0）溶质全部是固体
+    var precipitate = W === 0 ? m : status === "crystal" ? (per100 - S) * W / 100 : 0;
     var dissolved = m - precipitate;
     return {
       sub: sub, T: num(T, 20), W: W, m: m, S: S, per100: per100, status: status,
@@ -143,8 +144,10 @@
     var P = PAIRS[id];
     if (!P) return null;
     V = clamp(num(V, 0), 0, VMAX); eps = eps == null ? 1e-9 : eps;
-    var tot = VOL0 + V;                          // 溶液总体积（mL）
     var stage = V < VEQ - eps ? "before" : V <= VEQ + eps ? "equiv" : "after";
+    // 在容差内判为恰好完全反应时，按正好 20 mL 算，粒子数才守恒（不会出现加了 19.8 mL、Na⁺ 却和 Cl⁻ 一样多）
+    if (stage === "equiv") V = VEQ;
+    var tot = VOL0 + V;                          // 溶液总体积（mL）
     var ions = {}, precip = {}, gas = {}, pH, solutes;
     var mm = function (mmol) { return round(mmol * PER, 6); };
     if (id === 1 || id === 2) {

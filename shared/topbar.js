@@ -178,9 +178,9 @@
               : '<span class="abs-shell-badge local">本地模式</span>') +
           '</div>' +
           '<div class="abs-shell-stats">' +
-            '<div class="abs-shell-stat"><span>📐 数学</span><b>导图掌握 ' + mapsMastered("math") + ' · 动点 ' + summary.mpointDone + '/' + summary.mpointTotal + '</b></div>' +
+            '<div class="abs-shell-stat"><span>📐 数学</span><b>导图掌握 ' + mapsMastered("math") + ' · 动点 ' + summary.mpointDone + '/' + summary.mpointTotal + ' · 二次 ' + summary.quadDone + '/' + summary.quadTotal + '</b></div>' +
             '<div class="abs-shell-stat"><span>⚡ 物理</span><b>导图 ' + summary.kmMastered + ' · 实验台 ' + summary.circuitsDone + '/' + summary.circuitsTotal + ' · 高中 ' + summary.hsDone + '/' + summary.hsTotal + '</b></div>' +
-            '<div class="abs-shell-stat"><span>🧪 化学</span><b>导图掌握 ' + mapsMastered("chemistry") + ' · 中和 ' + summary.chemDone + '/' + summary.chemTotal + '</b></div>' +
+            '<div class="abs-shell-stat"><span>🧪 化学</span><b>导图掌握 ' + mapsMastered("chemistry") + ' · 中和 ' + summary.chemDone + '/' + summary.chemTotal + ' · 溶解度 ' + summary.solubDone + '/' + summary.solubTotal + ' · 溶质 ' + summary.soluteDone + '/' + summary.soluteTotal + '</b></div>' +
             '<div class="abs-shell-stat"><span>🧬 生物</span><b>导图掌握 ' + mapsMastered("biology") + ' · 显微镜 ' + summary.bioDone + '/' + summary.bioTotal + '</b></div>' +
           '</div>' +
           // 理解测试到期的错误概念在重测页统一做；放在账号窗里，哪一页都能进
