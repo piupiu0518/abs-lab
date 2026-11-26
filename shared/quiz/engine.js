@@ -761,7 +761,8 @@
       var actual = res && res.figure ? res.figure : null;
       clear(cmp);
       var idx = (item.answer.options || []).indexOf(opt);
-      var mine = h("div", { cls: "qz-fig", role: "img", "aria-label": "你预测的图象" });
+      // 预测选项没有缩略图（只有文字）时不留一块空白的图框，只写选了哪一项
+      var mine = h("div", { cls: "qz-fig", role: "img", "aria-label": "你预测的图象", hidden: !(opt && opt.figure) });
       var real = h("div", { cls: "qz-fig", role: "img", "aria-label": "实际得到的图象" });
       cmp.appendChild(h("figure", { cls: "qz-cmp-col" }, [
         h("figcaption", { cls: "qz-cmp-title", text: "你的预测" }), mine,
