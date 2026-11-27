@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>二次函数实验室 · ABS-LAB</title>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="../shared/quiz/quiz.css" />
+  <script src="../shared/auth.js"></script>
+  <style>
+    /* 只管页面排版；画板的样子由 svgkit 负责，题目卡片的样子由 quiz.css 负责。类名一律 qd- 开头。
+       间距：flex 容器不用 gap（iOS 14.5、Chrome 84 以前不支持），改用子项外边距 + 容器负外边距；grid 的 gap 照用 */
+    /* 宽屏上画板和右侧的滑块栏并排：主体放宽到 980px，手机上照常是一栏 */
+    .qd-page { max-width: 980px; }
+    .qd-hero .hero-pill-btn { min-height: 44px; }
+
+    /* ---------- 标签页：三个情境，一次只显示一个 ---------- */
+    .qd-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+    .qd-tab {
+      position: relative; min-width: 0; min-height: 52px; margin: 0; padding: 6px 6px 7px;
+      border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink);
+      font: inherit; line-height: 1.3; text-align: center; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qd-tab b { display: block; font-size: 0.94rem; }
+    .qd-tab small { display: block; margin-top: 1px; font-size: 0.74rem; font-weight: 600; color: var(--muted); }
+    .qd-tab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 -3px 0 var(--blue); }
+    .qd-tab[aria-selected="true"] small { color: var(--blue); }
+    .qd-tab:hover { border-color: var(--blue); }
+    /* 完成标记：小圆点贴在按钮右上角，不占文字的宽度（390px 下三个按钮各只有一百来 px） */
+    .qd-ok {
+      display: none; position: absolute; top: -7px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--green); color: #fff; font-size: 0.72rem; font-weight: 700; line-height: 20px; text-align: center;
+    }
+    .qd-tab.is-done .qd-ok { display: block; }
+    /* 读屏用的文字：看不见，但读得到「已完成」 */
+    .qd-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .qd-tab:not(.is-done) .qd-sr { display: none; }
+
+    /* ---------- 面板 ---------- */
+    .qd-panel[hidden] { display: none !important; }
+    .qd-lead { margin: 0 0 10px; color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+    .qd-lead b { color: var(--ink); }
+    .qd-boards { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; margin: 0; }
+    /* 屏宽 ≥ 820px：画板在左，滑块栏在右；手机上上下排（画板在上） */
+    @media (min-width: 820px) {
+      .qd-boards { grid-template-columns: minmax(0, 1fr) minmax(0, 300px); align-items: start; }
+    }
+    .qd-pane { min-width: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 6px 6px 8px; }
+    .qd-side { padding: 4px 12px 8px; }
+    .qd-board { width: 100%; min-width: 0; }
+    /* 解析式：等宽数字，拖动时宽度尽量不跳；文字只改文字节点（见 js/quadratic.js 开头） */
+    .qd-expr {
+      margin: 2px 4px 0; text-align: center; font-size: 1.16rem; font-weight: 700; line-height: 1.5; color: var(--ink);
+      font-variant-numeric: tabular-nums; overflow-wrap: anywhere;
+    }
+    /* 解析式和区间各自不拆开：太长时在两者之间换行（a、h、k 都调过以后 390px 一行可能放不下） */
+    .qd-expr > span { white-space: nowrap; }
+    .qd-expr .qd-range { color: var(--blue); }
+    .qd-read { margin: 4px 4px 0; text-align: center; font-size: 0.92rem; font-weight: 600; line-height: 1.6; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .qd-read b { color: var(--ink); }
+    .qd-nw { white-space: nowrap; }
+    .qd-shift { color: var(--purple); }
+    .qd-min { color: var(--green) !important; }
+    .qd-max { color: var(--red) !important; }
+    .qd-why { margin: 2px 4px 0; text-align: center; font-size: 0.86rem; line-height: 1.5; color: var(--muted); }
+    .qd-note { margin: 6px 0 0; font-size: 0.82rem; line-height: 1.5; color: var(--muted); }
+    /* 预测关卡「动手」阶段的一行提示：完成条件（顶点到过 x = 2 和 x = −2），其他阶段藏起来（js/quadratic.js 改 hidden） */
+    .qd-hint {
+      margin: 2px 2px 4px; padding: 3px 8px; border-radius: 8px; background: var(--blue-soft); color: var(--blue);
+      text-align: center; font-size: 0.82rem; font-weight: 700; line-height: 1.5;
+    }
+    .qd-hint[hidden] { display: none; }
+    /* 对比图下的说明分两行写（文字里的换行要保留）：手机上半宽的格子很窄，式子不从中间折断 */
+    #qz-vertex-ans .qz-cmp-note { white-space: pre-line; }
+    /* 静态图形不接指针：手指落在曲线、色带上也能照常滚动页面，挡不住可拖动的点 */
+    .qd-noptr { pointer-events: none; }
+    /* 区间窗口的浅色色带：只填色、不描边 */
+    .sk-board .qd-band .sk-stroke { stroke: none; fill-opacity: 0.1; }
+    .sk-board .qd-edge .sk-stroke { stroke-opacity: 0.45; }
+    /* 从 (0, 0) 指向顶点的浅色箭头 */
+    .sk-board .qd-arrow { opacity: 0.55; }
+    .sk-board .qd-arrow.sk-fillon .sk-stroke { fill-opacity: 1; }
+
+    /* 对称轴相对区间的三种情况各一种颜色：画板上的对称轴、它的标注和下面的短标签用同一个颜色 */
+    .qd-boards[data-case="left"] { --qd-cc: var(--cyan); }
+    .qd-boards[data-case="inside"] { --qd-cc: var(--purple); }
+    .qd-boards[data-case="right"] { --qd-cc: var(--coral); }
+    .qd-boards[data-case] .sk-board .qd-axis { --sk-c: var(--qd-cc, #5c667a); }
+    .qd-case {
+      display: inline-block; padding: 1px 12px 1px 10px; border: 2px solid var(--qd-cc, var(--line)); border-radius: 999px;
+      background: var(--surface); color: var(--ink); font-weight: 700; line-height: 1.6;
+    }
+    .qd-case::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 6px; border-radius: 50%; background: var(--qd-cc, var(--line)); vertical-align: 0; }
+
+    /* abc：对称轴在 y 轴哪一侧 */
+    .qd-sidelab { color: var(--purple); font-weight: 700; }
+    .qd-rel { color: var(--muted); }
+    /* 正负小表：三列 a、b、c；第二行是符号，第三行是它在图上对应什么 */
+    .qd-signs { width: 100%; margin: 6px 0 2px; border-collapse: collapse; table-layout: fixed; font-size: 0.86rem; line-height: 1.4; text-align: center; }
+    .qd-signs th, .qd-signs td { padding: 4px 2px; border: 1px solid var(--line); }
+    .qd-signs th { background: var(--surface-soft); font-style: italic; font-family: "Times New Roman", serif; font-size: 1rem; }
+    .qd-signs .qd-sg td { font-size: 1.15rem; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .qd-signs .qd-sg td[data-sign="+"] { color: var(--blue); }
+    .qd-signs .qd-sg td[data-sign="−"] { color: var(--coral); }
+    .qd-signs .qd-mean td { font-size: 0.78rem; color: var(--muted); }
+
+    /* 锁定（预测之前）：手机上画板和滑块栏上下排，滑块栏占着地方，把预测选项挤到下面去。
+       锁定时先不显示它（顶点读数那一行也先不显示：这时只有「不平移」），选项紧跟在画板下面；
+       提交预测（解锁）后再出现。宽屏左右并排时不藏（遮罩照样盖着） */
+    @media (max-width: 819.98px) {
+      .qd-boards.qd-locked .qd-side,
+      .qd-boards.qd-locked .qd-read { display: none; }
+    }
+
+    /* ---------- 题干、作答区（预测关卡） ---------- */
+    .qd-qprompt:empty, .qd-qans:empty { display: none; }
+    .qd-qans { margin-top: 12px; }
+    .qd-load { margin: 0; padding: 12px 14px; border: 1.5px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 0.9rem; }
+
+    /* ---------- 练一练 ---------- */
+    .qd-sec { margin-top: 28px; }
+    .qd-sec .section-head h2 { font-size: 1.12rem; }
+    .qd-practice { border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .qd-practice > summary {
+      display: flex; align-items: center; min-height: 48px; padding: 0 16px; cursor: pointer; list-style: none;
+      font-weight: 700; color: var(--blue);
+    }
+    .qd-practice > summary::-webkit-details-marker { display: none; }
+    .qd-practice > summary::before { content: "▸"; margin-right: 8px; }
+    .qd-practice[open] > summary::before { content: "▾"; }
+    .qd-more { padding: 4px 12px 12px; min-width: 0; }
+    .qd-check-row { margin: 12px 0 0; }
+    .qd-check {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
+      border-radius: 10px; border: 1.5px solid var(--blue); background: var(--blue-soft); color: var(--blue);
+      font-weight: 700; text-decoration: none;
+    }
+    .qd-check:hover { background: var(--surface); }
+    @media (max-width: 600px) {
+      .qd-more { padding: 4px 6px 10px; }
+      /* 手机：横幅压成一行（标题 + 返回按钮），说明段落不显示（每个面板上方已有一行说明）；
+         标签页、说明的下边距也收一点，打开页面时画板尽量在第一屏里 */
+      .qd-hero { padding-top: 8px; padding-bottom: 8px; }
+      .qd-hero p { display: none; }
+      .qd-hero h1 { font-size: 1.15rem; }
+      .qd-page { padding-top: 8px; }
+      .qd-tabs { margin-bottom: 10px; }
+      .qd-lead { margin-bottom: 8px; }
+      .qd-boards { gap: 8px; }
+      .qd-expr { font-size: 1.08rem; }
+    }
+  </style>
+</head>
+<body>
+  <script src="../shared/topbar.js" data-root=".." data-page="math"></script>
+
+  <header class="hero-banner qd-hero">
+    <div class="hero-inner">
+      <div>
+        <h1>二次函数实验室</h1>
+        <p>拖动顶点看平移和解析式，拖动区间找最值，调 a、b 看对称轴往哪边跑。</p>
+      </div>
+      <a class="hero-pill-btn" href="index.html">← 返回数学</a>
+    </div>
+  </header>
+
+  <main class="container qd-page">
+    <div class="qd-tabs" role="tablist" aria-label="三个情境">
+      <button type="button" class="qd-tab" role="tab" id="quad-tab-vertex" data-tab="vertex" aria-controls="quad-vertex" aria-selected="true">
+        <b>顶点 · 平移</b><small>顶点式</small><span class="qd-ok" aria-hidden="true">✓</span><span class="qd-sr">（已完成）</span>
+      </button>
+      <button type="button" class="qd-tab" role="tab" id="quad-tab-interval" data-tab="interval" aria-controls="quad-interval" aria-selected="false" tabindex="-1">
+        <b>区间 · 最值</b><small>对称轴在哪</small><span class="qd-ok" aria-hidden="true">✓</span><span class="qd-sr">（已完成）</span>
+      </button>
+      <button type="button" class="qd-tab" role="tab" id="quad-tab-abc" data-tab="abc" aria-controls="quad-abc" aria-selected="false" tabindex="-1">
+        <b>a、b、c</b><small>系数与图象</small><span class="qd-ok" aria-hidden="true">✓</span><span class="qd-sr">（已完成）</span>
+      </button>
+    </div>
+
+    <!-- 情境 vertex：顶点式与平移，挂预测关卡 m-m2-poe（外部部件 m2-vertex）。data-task 写在源码里：build-index 和 linker.js 都按它找任务 -->
+    <section class="qd-panel" id="quad-vertex" data-task="vertex" role="tabpanel" aria-labelledby="quad-tab-vertex">
+      <div class="qd-qprompt" id="qz-vertex-prompt"></div>
+      <p class="qd-lead">拖动<b>顶点</b>：顶点移到哪里，括号里写什么？</p>
+      <div class="qd-boards" id="quad-vertex-boards">
+        <div class="qd-pane qd-main">
+          <p class="qd-hint" id="quad-gate-hint" hidden>把顶点拖到 x = 2，再拖到 x = −2，看括号里的符号</p>
+          <p class="qd-expr" id="quad-expr">y = x²</p>
+          <div class="qd-board" id="quad-vertex-board"></div>
+          <p class="qd-read"><span class="qd-nw">顶点 (<b id="quad-vertex-at">0, 0</b>)</span>　<span class="qd-shift qd-nw" id="quad-shift">不平移</span></p>
+        </div>
+        <div class="qd-pane qd-side">
+          <div id="quad-vertex-ctl"></div>
+          <p class="qd-note">灰色虚线是 y = x²；紫色箭头从 (0, 0) 指向顶点。</p>
+        </div>
+      </div>
+      <div class="qd-qans" id="qz-vertex-ans"></div>
+    </section>
+
+    <!-- 情境 interval：区间上的最值（默认 y = (x − 1)² + 2，窗口 2 ≤ x ≤ 4） -->
+    <section class="qd-panel" id="quad-interval" data-task="interval" role="tabpanel" aria-labelledby="quad-tab-interval" hidden>
+      <p class="qd-lead">拖动 x 轴上的<b>区间窗口</b>：对称轴在窗口左边、里面、右边时，最值各在哪里？</p>
+      <div class="qd-boards" id="quad-interval-boards" data-case="left">
+        <div class="qd-pane qd-main">
+          <p class="qd-expr"><span id="quad-int-expr">y = (x − 1)² + 2</span>，<span class="qd-range" id="quad-int-range">2 ≤ x ≤ 4</span></p>
+          <div class="qd-board" id="quad-interval-board"></div>
+          <p class="qd-read"><span class="qd-case" id="quad-case" data-case="left">对称轴在区间左侧</span></p>
+          <p class="qd-read"><span class="qd-nw">最小值 <b class="qd-min" id="quad-min">3</b>（<span id="quad-min-at">x = 2</span>）</span>　<span class="qd-nw">最大值 <b class="qd-max" id="quad-max">11</b>（<span id="quad-max-at">x = 4</span>）</span></p>
+          <p class="qd-why" id="quad-why">在这一段上，y 随 x 的增大而增大</p>
+        </div>
+        <div class="qd-pane qd-side">
+          <div id="quad-interval-ctl"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 情境 abc：a、b、c 的符号与图象 -->
+    <section class="qd-panel" id="quad-abc" data-task="abc" role="tabpanel" aria-labelledby="quad-tab-abc" hidden>
+      <p class="qd-lead">调 <b>a</b>、<b>b</b>：对称轴跑到 y 轴的哪一侧？</p>
+      <div class="qd-boards" id="quad-abc-boards">
+        <div class="qd-pane qd-main">
+          <p class="qd-expr" id="quad-abc-expr">y = x² + 2x − 1</p>
+          <div class="qd-board" id="quad-abc-board"></div>
+          <p class="qd-read"><span class="qd-nw" id="quad-axis-f">对称轴 x = −b/(2a) = −1</span></p>
+          <p class="qd-read"><span class="qd-sidelab qd-nw" id="quad-side" data-side="left">对称轴在 y 轴左侧</span>　<span class="qd-rel qd-nw" id="quad-ab-rel">a、b 同号</span></p>
+        </div>
+        <!-- 滑块在前、正负小表在后：手机上打开这个情境时滑块尽量在第一屏里 -->
+        <div class="qd-pane qd-side">
+          <div id="quad-abc-ctl"></div>
+          <table class="qd-signs" id="quad-signs" aria-label="a、b、c 的正负">
+            <thead><tr><th scope="col">a</th><th scope="col">b</th><th scope="col">c</th></tr></thead>
+            <tbody>
+              <tr class="qd-sg"><td data-k="a" data-sign="+">+</td><td data-k="b" data-sign="+">+</td><td data-k="c" data-sign="−">−</td></tr>
+              <tr class="qd-mean"><td data-k="a">开口向上</td><td data-k="b">a、b 同号</td><td data-k="c">交 y 轴负半轴</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="qd-sec" aria-labelledby="qd-h-more">
+      <div class="section-head">
+        <h2 id="qd-h-more">练一练</h2>
+        <span class="section-note">换几个情境，检验同样的想法</span>
+      </div>
+      <details class="qz-practice qd-practice" id="quad-practice">
+        <summary>理解测试（9 题）</summary>
+        <div class="qd-more" id="quad-more"></div>
+      </details>
+      <p class="qd-check-row"><a class="qz-check-link qd-check" href="../check.html?m=m2&amp;t=pre">做小测（前测 / 后测）→</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">ABS-LAB · Authors: Wenzheng Wang · Hang Li</footer>
+
+  <script src="../shared/svgkit.js"></script>
+  <script src="../shared/quiz/core.js"></script>
+  <script src="../shared/quiz/engine.js"></script>
+  <script src="js/quadratic-model.js"></script>
+  <script src="js/quadratic.js"></script>
+  <script src="../shared/linker.js" data-mode="lab" data-lab="quad"></script>
+</body>
+</html>

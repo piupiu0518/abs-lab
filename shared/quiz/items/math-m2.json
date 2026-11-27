@@ -1,0 +1,749 @@
+{
+  "v": 1,
+  "items": [
+    {
+      "id": "m-m2-poe",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-2"
+      ],
+      "type": "predict",
+      "level": "junior",
+      "context": "平移与解析式",
+      "retest": false,
+      "page": "math/quadratic.html",
+      "widget": "m2-vertex",
+      "stem": "把抛物线 y = x² 向右平移 2 个单位。先预测：平移后的解析式是什么？",
+      "ask": "选出你的预测",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "y = (x + 2)²",
+            "mc": "shiftsign"
+          },
+          {
+            "id": "b",
+            "text": "y = (x − 2)²"
+          },
+          {
+            "id": "c",
+            "text": "y = x² + 2"
+          },
+          {
+            "id": "d",
+            "text": "y = x² − 2"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": null,
+      "confidence": true,
+      "explain": {
+        "prompt": "用一句话说一说：为什么向右移，括号里却是减号？",
+        "min": 6
+      },
+      "feedback": {
+        "ref": "原来 x = 0 处的最低点移到了 x = 2。要让 x = 2 时括号等于 0，括号里只能是 x − 2。"
+      }
+    },
+    {
+      "id": "m-m2-tt-shift",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-2"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "由解析式看平移",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "y = (x + 3)² − 1 的图象可以由 y = x² 怎样平移得到？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "向左平移 3 个单位，再向下平移 1 个单位"
+          },
+          {
+            "id": "b",
+            "text": "向右平移 3 个单位，再向下平移 1 个单位",
+            "mc": "shiftsign"
+          },
+          {
+            "id": "c",
+            "text": "向左平移 3 个单位，再向上平移 1 个单位"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "括号里是 + 3，所以往正方向（右）移",
+            "mc": "shiftsign"
+          },
+          {
+            "id": "r2",
+            "text": "先写出两条抛物线的顶点，看顶点怎么移动"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "y = x² 的顶点是 (0, 0)，y = (x + 3)² − 1 的顶点是 (−3, −1)：横坐标减小 3（向左），纵坐标减小 1（向下）。"
+      }
+    },
+    {
+      "id": "m-m2-tt-vertex",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-2"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "读顶点坐标",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "抛物线 y = 2(x − 1)² + 3 的顶点坐标是？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "(−1, 3)",
+            "mc": "shiftsign"
+          },
+          {
+            "id": "b",
+            "text": "(2, 3)"
+          },
+          {
+            "id": "c",
+            "text": "(1, 3)"
+          }
+        ],
+        "correct": "c"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "括号等于 0 时这一项最小，这时的 x 就是顶点横坐标"
+          },
+          {
+            "id": "r2",
+            "text": "顶点横坐标就是括号里跟在 x 后面的那个数",
+            "mc": "shiftsign"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "x − 1 = 0，即 x = 1 时，2(x − 1)² 最小为 0，此时 y = 3。"
+      }
+    },
+    {
+      "id": "m-m2-tt-interval",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-4"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "区间不含顶点",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "y = (x − 1)² + 2，当 2 ≤ x ≤ 4 时，y 的最小值是？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "2",
+            "mc": "vertexismax"
+          },
+          {
+            "id": "b",
+            "text": "3"
+          },
+          {
+            "id": "c",
+            "text": "11"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "开口向上的抛物线，最小值就是顶点的纵坐标",
+            "mc": "vertexismax"
+          },
+          {
+            "id": "r2",
+            "text": "先看对称轴在不在这个范围里；不在时，到离对称轴最近的端点去找"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "对称轴 x = 1 不在 2～4 之间；在这一段上 y 随 x 增大而增大，x = 2 时最小，y = 3。"
+      }
+    },
+    {
+      "id": "m-m2-tt-fence",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-4-1",
+        "math:c26-2-4"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "靠墙围菜园（墙长 8 m）",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "用 20 m 长的篱笆靠墙围一个矩形菜园（如图），墙长 8 m，靠墙的一边不用篱笆。垂直于墙的边长为 x m，面积 S = x(20 − 2x)。S 的最大值是？",
+      "figures": [
+        {
+          "view": [0, 10, 0.6, 5.8],
+          "aspect": "equal",
+          "axes": null,
+          "maxHeight": 180,
+          "alt": "靠墙围成的矩形菜园示意图，墙长 8 m",
+          "items": [
+            {
+              "t": "segment",
+              "a": [0.5, 5],
+              "b": [9.5, 5],
+              "color": "ink",
+              "width": 5
+            },
+            {
+              "t": "polyline",
+              "pts": [[2.5, 5], [2.5, 1.5], [7.5, 1.5], [7.5, 5]],
+              "width": 3
+            },
+            {
+              "t": "text",
+              "at": [5, 5],
+              "s": "墙（长 8 m）",
+              "pos": "n"
+            },
+            {
+              "t": "text",
+              "at": [2.5, 3.25],
+              "s": "x",
+              "pos": "w"
+            },
+            {
+              "t": "text",
+              "at": [7.5, 3.25],
+              "s": "x",
+              "pos": "e"
+            },
+            {
+              "t": "text",
+              "at": [5, 1.5],
+              "s": "20 − 2x",
+              "pos": "s"
+            },
+            {
+              "t": "text",
+              "at": [5, 3.25],
+              "s": "菜园",
+              "pos": "c"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "48 m²"
+          },
+          {
+            "id": "b",
+            "text": "50 m²",
+            "mc": "vertexismax"
+          },
+          {
+            "id": "c",
+            "text": "40 m²"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "先求 x 的取值范围（平行于墙的那条边不能超过墙长），再看顶点在不在范围里"
+          },
+          {
+            "id": "r2",
+            "text": "二次函数的最大值就是顶点的纵坐标",
+            "mc": "vertexismax"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "20 − 2x ≤ 8，所以 6 ≤ x < 10。对称轴 x = 5 不在范围里，S 在这一段上随 x 增大而减小，x = 6 时最大，S = 6 × 8 = 48。"
+      }
+    },
+    {
+      "id": "m-m2-tt-bup",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-5"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "开口向上读图",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "如图，抛物线 y = ax² + bx + c 开口向上，对称轴是直线 x = 1（在 y 轴右侧）。b 的符号是？",
+      "figures": [
+        {
+          "view": [-2, 4, -3, 4],
+          "aspect": "equal",
+          "axes": {
+            "x": "x",
+            "y": "y",
+            "xt": [],
+            "yt": []
+          },
+          "maxHeight": 240,
+          "alt": "开口向上的抛物线，对称轴是直线 x = 1",
+          "items": [
+            {
+              "t": "segment",
+              "a": [1, -3],
+              "b": [1, 4],
+              "color": "muted",
+              "dash": true
+            },
+            {
+              "t": "polyline",
+              "pts": [
+                [-1.375, 3.6406], [-1.25, 3.0625], [-1.125, 2.5156], [-1, 2], [-0.875, 1.5156], [-0.75, 1.0625],
+                [-0.625, 0.6406], [-0.5, 0.25], [-0.375, -0.1094], [-0.25, -0.4375], [-0.125, -0.7344], [0, -1],
+                [0.125, -1.2344], [0.25, -1.4375], [0.375, -1.6094], [0.5, -1.75], [0.625, -1.8594], [0.75, -1.9375],
+                [0.875, -1.9844], [1, -2], [1.125, -1.9844], [1.25, -1.9375], [1.375, -1.8594], [1.5, -1.75],
+                [1.625, -1.6094], [1.75, -1.4375], [1.875, -1.2344], [2, -1], [2.125, -0.7344], [2.25, -0.4375],
+                [2.375, -0.1094], [2.5, 0.25], [2.625, 0.6406], [2.75, 1.0625], [2.875, 1.5156], [3, 2],
+                [3.125, 2.5156], [3.25, 3.0625], [3.375, 3.6406]
+              ]
+            },
+            {
+              "t": "text",
+              "at": [1, 3.6],
+              "s": "x = 1",
+              "pos": "e"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "b > 0",
+            "mc": "axisbsign"
+          },
+          {
+            "id": "b",
+            "text": "b < 0"
+          },
+          {
+            "id": "c",
+            "text": "不能确定"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "对称轴在 y 轴右侧，b 就是正的",
+            "mc": "axisbsign"
+          },
+          {
+            "id": "r2",
+            "text": "对称轴是 x = −b/(2a)，要同时看 a 的符号"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "−b/(2a) = 1 > 0，且 a > 0，所以 b < 0。口诀「左同右异」：对称轴在 y 轴右侧时，a、b 异号。"
+      }
+    },
+    {
+      "id": "m-m2-tt-bdown",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-5"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "开口向下读图",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "如图，抛物线 y = ax² + bx + c 开口向下，对称轴是直线 x = −1（在 y 轴左侧）。b 的符号是？",
+      "figures": [
+        {
+          "view": [-4, 2, -4, 3],
+          "aspect": "equal",
+          "axes": {
+            "x": "x",
+            "y": "y",
+            "xt": [],
+            "yt": []
+          },
+          "maxHeight": 240,
+          "alt": "开口向下的抛物线，对称轴是直线 x = −1",
+          "items": [
+            {
+              "t": "segment",
+              "a": [-1, -4],
+              "b": [-1, 3],
+              "color": "muted",
+              "dash": true
+            },
+            {
+              "t": "polyline",
+              "pts": [
+                [-3.375, -3.6406], [-3.25, -3.0625], [-3.125, -2.5156], [-3, -2], [-2.875, -1.5156], [-2.75, -1.0625],
+                [-2.625, -0.6406], [-2.5, -0.25], [-2.375, 0.1094], [-2.25, 0.4375], [-2.125, 0.7344], [-2, 1],
+                [-1.875, 1.2344], [-1.75, 1.4375], [-1.625, 1.6094], [-1.5, 1.75], [-1.375, 1.8594], [-1.25, 1.9375],
+                [-1.125, 1.9844], [-1, 2], [-0.875, 1.9844], [-0.75, 1.9375], [-0.625, 1.8594], [-0.5, 1.75],
+                [-0.375, 1.6094], [-0.25, 1.4375], [-0.125, 1.2344], [0, 1], [0.125, 0.7344], [0.25, 0.4375],
+                [0.375, 0.1094], [0.5, -0.25], [0.625, -0.6406], [0.75, -1.0625], [0.875, -1.5156], [1, -2],
+                [1.125, -2.5156], [1.25, -3.0625], [1.375, -3.6406]
+              ]
+            },
+            {
+              "t": "text",
+              "at": [-1, -3.6],
+              "s": "x = −1",
+              "pos": "w"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "b < 0"
+          },
+          {
+            "id": "b",
+            "text": "b > 0"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "对称轴在左侧，说明 a、b 同号；开口向下，a < 0"
+          },
+          {
+            "id": "r2",
+            "text": "对称轴在 y 轴左侧，b 就是负的",
+            "mc": "axisbsign"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "这道题用理由 2 也能选对答案，但理由 2 不对：对称轴在左侧只说明 a、b 同号，开口向上时 b 就是正的。"
+      }
+    },
+    {
+      "id": "m-m2-tr-flip",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-4",
+        "math:c26-2-2",
+        "math:c26-2-5"
+      ],
+      "type": "transfer",
+      "level": "junior",
+      "context": "开口方向反过来",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "y = −(x − 1)² + 2，当 2 ≤ x ≤ 4 时，y 的最大值是？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "2",
+            "mc": "vertexismax"
+          },
+          {
+            "id": "b",
+            "text": "−7"
+          },
+          {
+            "id": "c",
+            "text": "1"
+          }
+        ],
+        "correct": "c"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "开口向下的抛物线，最大值就是顶点的纵坐标",
+            "mc": "vertexismax"
+          },
+          {
+            "id": "r2",
+            "text": "对称轴不在范围里，开口向下时在这一段上 y 随 x 增大而减小，到离对称轴最近的端点去找"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "x = 2 时 y = 1；x = 4 时 y = −7。最大值是 1，最小值是 −7。"
+      }
+    },
+    {
+      "id": "m-m2-tr-wall",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-4-1",
+        "math:c26-2-4"
+      ],
+      "type": "transfer",
+      "level": "junior",
+      "context": "墙变长（墙长 12 m）",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "用 20 m 长的篱笆靠墙围一个矩形菜园（如图），靠墙的一边不用篱笆，墙长 12 m。垂直于墙的边长为 x m，S = x(20 − 2x) 的最大值是？",
+      "figures": [
+        {
+          "view": [0, 10, 0.6, 5.8],
+          "aspect": "equal",
+          "axes": null,
+          "maxHeight": 180,
+          "alt": "靠墙围成的矩形菜园示意图，墙长 12 m",
+          "items": [
+            {
+              "t": "segment",
+              "a": [0.5, 5],
+              "b": [9.5, 5],
+              "color": "ink",
+              "width": 5
+            },
+            {
+              "t": "polyline",
+              "pts": [[2.5, 5], [2.5, 1.5], [7.5, 1.5], [7.5, 5]],
+              "width": 3
+            },
+            {
+              "t": "text",
+              "at": [5, 5],
+              "s": "墙（长 12 m）",
+              "pos": "n"
+            },
+            {
+              "t": "text",
+              "at": [2.5, 3.25],
+              "s": "x",
+              "pos": "w"
+            },
+            {
+              "t": "text",
+              "at": [7.5, 3.25],
+              "s": "x",
+              "pos": "e"
+            },
+            {
+              "t": "text",
+              "at": [5, 1.5],
+              "s": "20 − 2x",
+              "pos": "s"
+            },
+            {
+              "t": "text",
+              "at": [5, 3.25],
+              "s": "菜园",
+              "pos": "c"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "50 m²"
+          },
+          {
+            "id": "b",
+            "text": "48 m²"
+          },
+          {
+            "id": "c",
+            "text": "72 m²"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "先求 x 的取值范围，再看顶点在不在范围里"
+          },
+          {
+            "id": "r2",
+            "text": "让平行于墙的那条边等于墙长，面积就最大"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "20 − 2x ≤ 12，所以 4 ≤ x < 10。对称轴 x = 5 在范围里，x = 5 时 S 最大，为 50；x = 4 时只有 48。"
+      }
+    },
+    {
+      "id": "m-m2-inv",
+      "subject": "math",
+      "module": "m2",
+      "kp": [
+        "math:c26-2-2"
+      ],
+      "type": "inverse",
+      "level": "junior",
+      "context": "由图象求解析式",
+      "retest": true,
+      "page": "math/quadratic.html",
+      "widget": null,
+      "stem": "如图，抛物线的顶点是 (2, −1)，并且经过点 (0, 3)。它的解析式是？",
+      "figures": [
+        {
+          "view": [-1, 5, -2, 4],
+          "aspect": "equal",
+          "axes": {
+            "x": "x",
+            "y": "y",
+            "xt": [],
+            "yt": []
+          },
+          "maxHeight": 240,
+          "alt": "抛物线的图象，顶点 (2, −1)，经过点 (0, 3)",
+          "items": [
+            {
+              "t": "polyline",
+              "pts": [
+                [-0.125, 3.5156], [0, 3], [0.125, 2.5156], [0.25, 2.0625], [0.375, 1.6406], [0.5, 1.25],
+                [0.625, 0.8906], [0.75, 0.5625], [0.875, 0.2656], [1, 0], [1.125, -0.2344], [1.25, -0.4375],
+                [1.375, -0.6094], [1.5, -0.75], [1.625, -0.8594], [1.75, -0.9375], [1.875, -0.9844], [2, -1],
+                [2.125, -0.9844], [2.25, -0.9375], [2.375, -0.8594], [2.5, -0.75], [2.625, -0.6094], [2.75, -0.4375],
+                [2.875, -0.2344], [3, 0], [3.125, 0.2656], [3.25, 0.5625], [3.375, 0.8906], [3.5, 1.25],
+                [3.625, 1.6406], [3.75, 2.0625], [3.875, 2.5156], [4, 3], [4.125, 3.5156]
+              ]
+            },
+            {
+              "t": "point",
+              "at": [2, -1],
+              "label": "(2, −1)",
+              "pos": "s"
+            },
+            {
+              "t": "point",
+              "at": [0, 3],
+              "label": "(0, 3)",
+              "pos": "e"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "y = 2(x − 2)² − 1"
+          },
+          {
+            "id": "b",
+            "text": "y = (x − 2)² − 1"
+          },
+          {
+            "id": "c",
+            "text": "y = (x + 2)² − 1",
+            "mc": "shiftsign"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "顶点横坐标是 2，括号里就写 + 2",
+            "mc": "shiftsign"
+          },
+          {
+            "id": "r2",
+            "text": "由顶点设 y = a(x − h)² + k，再把另一个点代进去求 a"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "设 y = a(x − 2)² − 1，代入 (0, 3)：4a − 1 = 3，a = 1。"
+      }
+    }
+  ]
+}

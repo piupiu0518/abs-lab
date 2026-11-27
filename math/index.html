@@ -37,7 +37,7 @@
 
     <div class="section-head">
       <h2>互动实验 <span class="en-inline">Interactive Labs</span></h2>
-      <span class="section-note">「动点与函数图象」和示范题已上线，标着「初中」（按人教版教材划分）；其余实验还在规划中</span>
+      <span class="section-note">「动点与函数图象」「二次函数实验室」和示范题已上线，标着「初中」（按人教版教材划分）；其余实验还在规划中</span>
     </div>
     <div class="portal-grid">
       <a class="portal-card" href="moving-point.html">
@@ -46,6 +46,13 @@
         <p>拖动动点，看面积的图象一段一段画出来：拐点在哪里、面积什么时候最大、横轴换成时间又会怎样。</p>
         <div data-lk-lab="mpoint"></div>
         <div class="portal-foot"><span id="hub-mpoint">拖动 · 预测 · 读图</span><span>进入 →</span></div>
+      </a>
+      <a class="portal-card" href="quadratic.html">
+        <div class="portal-top"><div class="portal-icon sun">📉</div><span class="badge badge-live">初中</span></div>
+        <h3>二次函数实验室</h3>
+        <p>拖动顶点看平移和解析式，拖动区间找最值，调 a、b 看对称轴往哪边跑。</p>
+        <div data-lk-lab="quad"></div>
+        <div class="portal-foot"><span id="hub-quad">拖动 · 预测 · 找最值</span><span>进入 →</span></div>
       </a>
       <a class="portal-card" href="demo-poe.html">
         <div class="portal-top"><div class="portal-icon coral">🎯</div><span class="badge badge-live">初中</span></div>
@@ -83,6 +90,8 @@
         // 「动点与函数图象」的三个任务：做过就显示进度，没做过保留「拖动 · 预测 · 读图」
         var mp = document.getElementById("hub-mpoint");
         if (mp) mp.textContent = s.mpointDone ? "已完成 " + s.mpointDone + " / " + (s.mpointTotal || 3) : "拖动 · 预测 · 读图";
+        var qd = document.getElementById("hub-quad");
+        if (qd) qd.textContent = s.quadDone ? "已完成 " + s.quadDone + " / " + (s.quadTotal || 3) : "拖动 · 预测 · 找最值";
       }
       window.addEventListener("abs-auth-changed", render);
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render); else render();
