@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>溶解度曲线 · ABS-LAB</title>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="../shared/quiz/quiz.css" />
+  <script src="../shared/auth.js"></script>
+  <style>
+    /* 只管页面排版；画板的样子由 svgkit 负责，题目卡片的样子由 quiz.css 负责。类名一律 sb- 开头。
+       视觉沿用中和反应实验台（卡片、图例、读数），但只用中文。
+       间距：flex 容器不用 gap（iOS 14.5、Chrome 84 以前不支持），改用子项外边距 + 容器负外边距；grid 的 gap 照用 */
+    .sb-page { max-width: 1000px; }
+    .sb-hero .hero-pill-btn { min-height: 44px; }
+
+    /* ---------- 标签页：三个情境，一次只显示一个（同动点页） ---------- */
+    .sb-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+    .sb-tab {
+      position: relative; min-width: 0; min-height: 52px; margin: 0; padding: 6px 6px 7px;
+      border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink);
+      font: inherit; line-height: 1.3; text-align: center; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sb-tab b { display: block; font-size: 0.94rem; }
+    .sb-tab small { display: block; margin-top: 1px; font-size: 0.74rem; font-weight: 600; color: var(--muted); }
+    .sb-tab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 -3px 0 var(--blue); }
+    .sb-tab[aria-selected="true"] small { color: var(--blue); }
+    .sb-tab:hover { border-color: var(--blue); }
+    /* 完成标记：小圆点贴在按钮右上角，不占文字的宽度 */
+    .sb-ok {
+      display: none; position: absolute; top: -7px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--green); color: #fff; font-size: 0.72rem; font-weight: 700; line-height: 20px; text-align: center;
+    }
+    .sb-tab.is-done .sb-ok { display: block; }
+    .sb-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .sb-tab:not(.is-done) .sb-sr { display: none; }
+
+    /* ---------- 面板 ---------- */
+    .sb-panel[hidden] { display: none !important; }
+    .sb-lead { margin: 0 0 10px; color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+    .sb-lead b { color: var(--ink); }
+    .sb-qprompt:empty, .sb-qans:empty { display: none; }
+    .sb-qans { margin-top: 12px; }
+
+    /* ---------- 模块卡片（预测关卡的遮罩盖在这一整块上） ---------- */
+    .sb-stage { padding: 10px 12px 12px; }
+    /* 标题行：标题 + 图例（或切换按钮），放不下就折行。项距用外边距：容器左移 12px，子项各右移 12px */
+    .sb-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; margin: -4px 0 6px -12px; }
+    .sb-head > .sb-title { margin: 4px 0 0 12px; font-size: 1rem; line-height: 1.4; } /* 压过 theme.css 的 .card h3 */
+    .sb-title b { color: var(--blue); font-variant-numeric: tabular-nums; }
+    /* 图例：小号字，一行放不下就折行。单独一行时自己左移 12px；放在标题行里时标题行已经左移过了 */
+    .sb-legend { display: flex; flex-wrap: wrap; align-items: center; margin: -2px 0 6px -12px; padding: 0; list-style: none; font-size: 0.78rem; color: var(--muted); }
+    .sb-head > .sb-legend { margin: 2px 0 0 0; }
+    /* 图例的字比较长（「溶液实际组成的点（溶液里实际溶解了多少溶质）」）：390 px 上一项占一行；更窄的屏上一项里面折行，不横向溢出 */
+    .sb-legend li { display: inline-flex; align-items: center; min-width: 0; margin: 2px 0 0 12px; }
+    .sb-lg { display: inline-block; flex: none; margin-right: 5px; }
+    .sb-lg + .sb-lg { margin-left: -2px; } /* compare：两种颜色的图标并排（KNO₃ 蓝、NaCl 绿） */
+    .sb-lg-hollow { width: 11px; height: 11px; border-radius: 50%; border: 2.5px solid var(--blue); background: var(--surface); box-sizing: border-box; }
+    .sb-lg-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--blue); }
+    .sb-lg-line { width: 16px; height: 3px; border-radius: 2px; background: var(--blue); }
+    .sb-lg-dash { width: 16px; height: 0; border-top: 2px dashed var(--coral); }
+    .sb-lg.is-green { border-color: var(--green); }
+    .sb-lg-dot.is-green, .sb-lg-line.is-green { background: var(--green); }
+    .sb-lg-dot.is-purple { background: var(--purple); }
+
+    /* 画板 + 侧栏：手机上上下排（画板在上，下面一行是烧杯和读数）；宽屏左右并排 */
+    .sb-main { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+    @media (min-width: 820px) {
+      .sb-main { grid-template-columns: minmax(0, 1fr) 260px; align-items: start; }
+    }
+    .sb-board { width: 100%; min-width: 0; }
+    .sb-side { display: grid; grid-template-columns: 92px minmax(0, 1fr); gap: 12px; align-items: center; min-width: 0; }
+    @media (min-width: 820px) {
+      .sb-side { grid-template-columns: minmax(0, 1fr); gap: 8px; padding-top: 4px; }
+      .sb-side .sb-bk-wrap { width: 128px; justify-self: center; }
+    }
+    /* 烧杯（js 里画的小 SVG）：杯底的晶体随析出量增减 */
+    .sb-bk-wrap { margin: 0; text-align: center; min-width: 0; }
+    .sb-bk svg { display: block; width: 100%; height: auto; }
+    .sb-bk-cap { margin-top: 1px; font-size: 0.78rem; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .sb-bk-glass { fill: none; stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+    .sb-bk-liq { fill: var(--blue-soft); }
+    .sb-bk-surf { stroke: var(--blue); stroke-width: 1.5; opacity: 0.55; }
+    .sb-bk-x { fill: var(--coral-soft); stroke: var(--coral); stroke-width: 1; stroke-linejoin: round; }
+    .sb-bk-mark { stroke: var(--light); stroke-width: 1; }
+
+    /* 读数：等宽数字，拖动时宽度不跳；文字只改文字节点（见 js/solubility.js 开头） */
+    .sb-read { margin: 0; font-size: 0.9rem; line-height: 1.35; min-width: 0; }
+    .sb-r { display: flex; justify-content: space-between; align-items: baseline; padding: 3px 0; border-bottom: 1px dashed var(--line); }
+    .sb-r:last-child { border-bottom: 0; }
+    .sb-r dt { margin: 0 8px 0 0; color: var(--muted); font-size: 0.84rem; white-space: nowrap; }
+    .sb-r dd { margin: 0; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    /* 状态的颜色：不饱和蓝、恰好饱和绿、有晶体珊瑚色（和板上的虚线、杯底的晶体同色） */
+    .sb-st[data-status="unsat"] { color: var(--blue); }
+    .sb-st[data-status="sat"] { color: var(--green); }
+    .sb-st[data-status="crystal"] { color: var(--coral); }
+
+    /* ---------- 画板里的元素 ---------- */
+    /* 状态点是空心圆（svgkit 的点默认实心）：前缀 .sb-board 压过 svgkit 的 .sk-disabled 规则，锁着时也保持空心 */
+    .sb-board .sb-hollow .sk-pt-dot { fill: var(--surface, #fff); stroke: var(--sk-c); stroke-width: 3px; }
+    .sb-board .sb-hollow.sk-disabled .sk-pt-dot { fill: var(--surface, #fff); stroke: var(--sk-c); stroke-opacity: 0.45; }
+    /* 静态图形不接指针：手指落在曲线、实心点上也能照常滚动页面，挡不住状态点的触控圈 */
+    .sb-noptr { pointer-events: none; }
+    /* 溶液实际组成的点走过的路线：宽而淡，压在曲线下面 */
+    .sb-board .sb-trail .sk-stroke { stroke-opacity: 0.22; }
+    .sb-board .sb-tag .sk-text { font-size: 13px; }
+
+    /* 锁定（预测之前）时：读数先看不见（「溶解度 110 g · 不饱和」等于提前看了一部分结果），各种宽度都这样；
+       宽屏左右并排时用 visibility 占着位置，解锁时右边一栏不跳 */
+    .sb-stage.sb-locked .sb-read { visibility: hidden; }
+    /* 手机上锁定时连烧杯一起不显示，预测选项紧跟在画板下面（同动点页藏函数板） */
+    @media (max-width: 819.98px) {
+      .sb-stage.sb-locked .sb-side { display: none; }
+      /* 面板上方那句「拖动空心点……」在预测之前用不上，题干就在它上面：先不占地方，预测选项能再往上提一些 */
+      .sb-panel.sb-locked .sb-lead { display: none; }
+      /* 图例在手机上占三行：预测之前先不显示（题干已经说明了「溶液实际组成的点」），第一个预测选项留在首屏里 */
+      .sb-stage.sb-locked .sb-legend { display: none; }
+    }
+
+    /* ---------- 按钮 ---------- */
+    .sb-acts { display: flex; flex-wrap: wrap; margin: 2px 0 0 -8px; }
+    .sb-acts > * { margin: 8px 0 0 8px; }
+    .sb-btn {
+      flex: 1 1 auto; min-height: 44px; padding: 0 16px; border: 1.5px solid var(--line); border-radius: 10px;
+      background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sb-btn:hover { border-color: var(--blue); color: var(--blue); }
+    .sb-btn-pri { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .sb-btn-pri:hover { background: var(--blue-hover); color: #fff; }
+    .sb-btn:disabled, .sb-btn:disabled:hover { cursor: not-allowed; opacity: 0.5; border-color: var(--line); background: var(--surface); color: var(--muted); }
+    .sb-note { margin: 6px 0 0; font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+    /* 选拖哪个状态点（compare）：两个按钮各占一半 */
+    .sb-seg { display: flex; flex: 1 1 100%; margin: 6px 0 0 4px; }
+    .sb-seg > button { flex: 1 1 0; min-width: 0; margin: 0 0 0 8px; }
+    .sb-seg button {
+      min-height: 44px; padding: 0 10px; border: 1.5px solid var(--line); border-radius: 10px;
+      background: var(--surface); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .sb-seg button[data-solub-pick="KNO3"][aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); }
+    .sb-seg button[data-solub-pick="NaCl"][aria-pressed="true"] { border-color: var(--green); background: var(--green-soft); color: var(--green); }
+    @media (min-width: 820px) {
+      .sb-seg { flex: 0 1 360px; }
+    }
+
+    /* ---------- compare：两种溶液并排的读数表 ---------- */
+    .sb-side.sb-side-cmp { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    /* 列宽固定（table-layout: fixed + colgroup）：状态从「不饱和」变成「恰好饱和」、质量分数一行高亮时，各列不左右跳 */
+    .sb-tbl { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 0.88rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+    .sb-tbl .sb-col-h { width: 28%; }
+    .sb-tbl th, .sb-tbl td { padding: 3px 4px; text-align: center; }
+    .sb-tbl td { font-weight: 700; white-space: nowrap; }
+    .sb-tbl tbody th { padding-left: 0; text-align: left; font-size: 0.82rem; font-weight: 600; color: var(--muted); white-space: nowrap; }
+    .sb-tbl tbody tr + tr > * { border-top: 1px dashed var(--line); }
+    .sb-tbl thead th { vertical-align: bottom; font-size: 0.86rem; color: var(--muted); }
+    .sb-tbl thead th .sb-bk { width: 46px; margin: 0 auto 1px; }
+    .sb-tbl thead th.is-on[data-sub="KNO3"] { color: var(--blue); }
+    .sb-tbl thead th.is-on[data-sub="NaCl"] { color: var(--green); }
+    .sb-tbl td.sb-st { white-space: normal; }
+    /* 质量分数这一行：两份都在交点、都饱和时相同，整行高亮 */
+    .sb-eq > * { transition: background-color 0.15s, color 0.15s; }
+    /* 只改颜色（不改字号、字重）：高亮前后各列宽度不变，表格不左右跳 */
+    .sb-eq.on > th, .sb-eq.on > td { background: var(--green-soft); color: var(--green); }
+    .sb-hint { min-height: 1.5em; margin: 6px 0 0; font-size: 0.84rem; font-weight: 600; line-height: 1.5; color: var(--muted); }
+    .sb-hint.is-eq { color: var(--green); }
+
+    /* ---------- 进阶 ---------- */
+    .sb-adv { margin-top: 10px; }
+    .sb-adv-body { padding: 0 2px 6px; }
+    .sb-adv-note { margin: 6px 0 0; font-size: 0.84rem; color: var(--muted); }
+    .sb-adv-note[hidden] { display: none; }
+
+    /* ---------- 练一练 ---------- */
+    .sb-sec { margin-top: 28px; }
+    .sb-sec .section-head h2 { font-size: 1.12rem; }
+    .sb-practice { border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .sb-practice > summary {
+      display: flex; align-items: center; min-height: 48px; padding: 0 16px; cursor: pointer; list-style: none;
+      font-weight: 700; color: var(--blue);
+    }
+    .sb-practice > summary::-webkit-details-marker { display: none; }
+    .sb-practice > summary::before { content: "▸"; margin-right: 8px; }
+    .sb-practice[open] > summary::before { content: "▾"; }
+    .sb-more { padding: 4px 12px 12px; min-width: 0; }
+    .sb-load { margin: 0; padding: 12px 14px; border: 1.5px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 0.9rem; }
+    .sb-check-row { margin: 12px 0 0; }
+    .sb-check {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
+      border-radius: 10px; border: 1.5px solid var(--blue); background: var(--blue-soft); color: var(--blue);
+      font-weight: 700; text-decoration: none;
+    }
+    .sb-check:hover { background: var(--surface); }
+
+    @media (max-width: 600px) {
+      .sb-more { padding: 4px 6px 10px; }
+      /* 手机：横幅压成一行（标题 + 返回按钮），说明段落不显示（每个面板上方已有一行说明）；
+         打开页面时画板尽量在第一屏里，拖状态点时看得见读数 */
+      .sb-hero { padding-top: 8px; padding-bottom: 8px; }
+      .sb-hero p { display: none; }
+      .sb-hero h1 { font-size: 1.15rem; }
+      .sb-page { padding-top: 8px; }
+      .sb-tabs { margin-bottom: 10px; }
+      .sb-lead { margin-bottom: 8px; }
+      .sb-stage { padding: 8px 8px 10px; }
+      .sb-head > .sb-title { font-size: 0.95rem; }
+      /* compare 的两条曲线在板上直接写了名字（KNO₃、NaCl、交点）：手机上不再单列图例，表格能多露出一些 */
+      .sb-legend-cmp { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <script src="../shared/topbar.js" data-root=".." data-page="chemistry"></script>
+
+  <header class="hero-banner sb-hero">
+    <div class="hero-inner">
+      <div>
+        <h1>溶解度曲线</h1>
+        <p>拖动状态点，看溶液什么时候饱和、析出多少晶体：降温结晶、两条曲线的交点、NaCl 的蒸发结晶。</p>
+      </div>
+      <a class="hero-pill-btn" href="index.html">← 返回化学</a>
+    </div>
+  </header>
+
+  <main class="container sb-page">
+    <div class="sb-tabs" role="tablist" aria-label="三个情境">
+      <button type="button" class="sb-tab" role="tab" id="solub-tab-cool" data-tab="cool" aria-controls="solub-cool" aria-selected="true">
+        <b>降温结晶</b><small>KNO₃</small><span class="sb-ok" aria-hidden="true">✓</span><span class="sb-sr">（已完成）</span>
+      </button>
+      <button type="button" class="sb-tab" role="tab" id="solub-tab-compare" data-tab="compare" aria-controls="solub-compare" aria-selected="false" tabindex="-1">
+        <b>两条曲线</b><small>交点</small><span class="sb-ok" aria-hidden="true">✓</span><span class="sb-sr">（已完成）</span>
+      </button>
+      <button type="button" class="sb-tab" role="tab" id="solub-tab-nacl" data-tab="nacl" aria-controls="solub-nacl" aria-selected="false" tabindex="-1">
+        <b>NaCl</b><small>蒸发结晶</small><span class="sb-ok" aria-hidden="true">✓</span><span class="sb-sr">（已完成）</span>
+      </button>
+    </div>
+
+    <!-- 情境 cool：降温结晶（KNO₃），挂预测关卡 c-cb-poe（部件 cb-state）。data-task 写在源码里：build-index 和 linker.js 都按它找任务 -->
+    <section class="sb-panel" id="solub-cool" data-task="cool" role="tabpanel" aria-labelledby="solub-tab-cool">
+      <div class="sb-qprompt" id="qz-cool-prompt"></div>
+      <p class="sb-lead">左右拖动<b>空心点</b>（只改温度，加入的 KNO₃ 不变）：什么时候开始析出晶体？</p>
+      <div class="card sb-stage" id="solub-cool-boards">
+        <div class="sb-head">
+          <h3 class="sb-title">KNO₃ · 100 g 水 · 一共加入 <b id="solub-cool-m">80</b> g</h3>
+          <ul class="sb-legend" aria-label="图例">
+            <li><i class="sb-lg sb-lg-hollow"></i>状态点（一共加入的溶质，按每 100 g 水算）</li>
+            <li><i class="sb-lg sb-lg-dot"></i>溶液实际组成的点（溶液里实际溶解了多少溶质）</li>
+            <li><i class="sb-lg sb-lg-dash"></i>析出的晶体</li>
+          </ul>
+        </div>
+        <div class="sb-main">
+          <div class="sb-board" id="solub-cool-board"></div>
+          <div class="sb-side">
+            <figure class="sb-bk-wrap">
+              <div class="sb-bk" id="solub-cool-beaker"></div>
+              <figcaption class="sb-bk-cap">水 100 g</figcaption>
+            </figure>
+            <dl class="sb-read" id="solub-cool-read" data-status="unsat">
+              <div class="sb-r"><dt>温度</dt><dd data-r="T">60.0℃</dd></div>
+              <div class="sb-r"><dt>溶解度 S</dt><dd data-r="S">110.0 g</dd></div>
+              <div class="sb-r"><dt>状态</dt><dd class="sb-st" data-r="status" data-status="unsat">不饱和</dd></div>
+              <div class="sb-r"><dt>析出晶体的质量</dt><dd data-r="ppt">0.0 g</dd></div>
+              <div class="sb-r"><dt>溶质质量分数</dt><dd data-r="w">44.4%</dd></div>
+            </dl>
+          </div>
+        </div>
+      </div>
+      <div class="sb-qans" id="qz-cool-ans"></div>
+      <details class="sk-adv sb-adv" id="solub-cool-adv">
+        <summary>进阶</summary>
+        <div class="sb-adv-body">
+          <div id="solub-cool-ctl"></div>
+          <p class="sb-adv-note" id="solub-cool-adv-note" hidden>先做完上面的预测关卡，再改加入的 KNO₃。</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 情境 compare：两条曲线与交点（KNO₃、NaCl 各一份，都是 100 g 水） -->
+    <section class="sb-panel" id="solub-compare" data-task="compare" role="tabpanel" aria-labelledby="solub-tab-compare" hidden>
+      <p class="sb-lead">选一种溶质，拖它的<b>空心点</b>：左右改温度，上下改溶质的质量。两个点都放到<b>交点温度</b>，比一比质量分数。</p>
+      <div class="card sb-stage" id="solub-compare-boards">
+        <div class="sb-head">
+          <h3 class="sb-title">KNO₃ 和 NaCl · 各 100 g 水</h3>
+          <div class="sb-seg" role="group" aria-label="选择要拖动的状态点">
+            <button type="button" data-solub-pick="KNO3" aria-pressed="true">拖 KNO₃</button>
+            <button type="button" data-solub-pick="NaCl" aria-pressed="false">拖 NaCl</button>
+          </div>
+        </div>
+        <ul class="sb-legend sb-legend-cmp" aria-label="图例：曲线">
+          <li><i class="sb-lg sb-lg-line"></i>KNO₃ 的溶解度曲线</li>
+          <li><i class="sb-lg sb-lg-line is-green"></i>NaCl 的溶解度曲线</li>
+          <li><i class="sb-lg sb-lg-dot is-purple"></i>交点</li>
+        </ul>
+        <!-- 点的图例和 cool、nacl 同样的说法（手机上也显示：板上没有直接写点的名字）；两种颜色的图标并排 -->
+        <ul class="sb-legend sb-legend-pts" aria-label="图例">
+          <li><i class="sb-lg sb-lg-hollow"></i><i class="sb-lg sb-lg-hollow is-green"></i>状态点（一共加入的溶质，按每 100 g 水算）</li>
+          <li><i class="sb-lg sb-lg-dot"></i><i class="sb-lg sb-lg-dot is-green"></i>溶液实际组成的点（溶液里实际溶解了多少溶质）</li>
+          <li><i class="sb-lg sb-lg-dash"></i>析出的晶体</li>
+        </ul>
+        <div class="sb-main">
+          <div class="sb-board" id="solub-compare-board"></div>
+          <div class="sb-side sb-side-cmp">
+            <table class="sb-tbl" id="solub-compare-read" data-status="unsat">
+              <colgroup><col class="sb-col-h" /><col /><col /></colgroup>
+              <thead>
+                <tr>
+                  <th scope="col"><span class="sb-sr">读数</span></th>
+                  <th scope="col" data-sub="KNO3" class="is-on"><div class="sb-bk" id="solub-compare-bk-KNO3"></div>KNO₃</th>
+                  <th scope="col" data-sub="NaCl"><div class="sb-bk" id="solub-compare-bk-NaCl"></div>NaCl</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">温度</th><td data-r="T-KNO3">45.0℃</td><td data-r="T-NaCl">40.0℃</td></tr>
+                <tr><th scope="row">溶解度 S</th><td data-r="S-KNO3">74.3 g</td><td data-r="S-NaCl">36.6 g</td></tr>
+                <tr><th scope="row">状态</th><td class="sb-st" data-r="status-KNO3" data-status="unsat">不饱和</td><td class="sb-st" data-r="status-NaCl" data-status="unsat">不饱和</td></tr>
+                <tr><th scope="row">析出晶体</th><td data-r="ppt-KNO3">0.0 g</td><td data-r="ppt-NaCl">0.0 g</td></tr>
+                <tr class="sb-eq" data-solub-equal><th scope="row">质量分数</th><td data-r="w-KNO3">33.3%</td><td data-r="w-NaCl">16.7%</td></tr>
+              </tbody>
+            </table>
+            <p class="sb-hint" id="solub-compare-hint" aria-live="polite"> </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 情境 nacl：NaCl 与蒸发结晶 -->
+    <section class="sb-panel" id="solub-nacl" data-task="nacl" role="tabpanel" aria-labelledby="solub-tab-nacl" hidden>
+      <p class="sb-lead">60℃ 的 NaCl 饱和溶液：先左右拖<b>空心点</b>降温，再<b>恒温蒸发</b>一些水，各析出多少？</p>
+      <div class="card sb-stage" id="solub-nacl-boards">
+        <div class="sb-head">
+          <h3 class="sb-title">NaCl · 水 <b id="solub-nacl-w">100</b> g · 一共 37.3 g</h3>
+          <ul class="sb-legend" aria-label="图例">
+            <li><i class="sb-lg sb-lg-hollow is-green"></i>状态点（一共加入的溶质，按每 100 g 水算）</li>
+            <li><i class="sb-lg sb-lg-dot is-green"></i>溶液实际组成的点（溶液里实际溶解了多少溶质）</li>
+            <li><i class="sb-lg sb-lg-dash"></i>析出的部分（按每 100 g 水算）</li>
+          </ul>
+        </div>
+        <div class="sb-main">
+          <div class="sb-board" id="solub-nacl-board"></div>
+          <div class="sb-side">
+            <figure class="sb-bk-wrap">
+              <div class="sb-bk" id="solub-nacl-beaker"></div>
+              <figcaption class="sb-bk-cap" id="solub-nacl-cap">水 100 g</figcaption>
+            </figure>
+            <dl class="sb-read" id="solub-nacl-read" data-status="sat">
+              <div class="sb-r"><dt>温度</dt><dd data-r="T">60.0℃</dd></div>
+              <div class="sb-r"><dt>溶解度 S</dt><dd data-r="S">37.3 g</dd></div>
+              <div class="sb-r"><dt>状态</dt><dd class="sb-st" data-r="status" data-status="sat">恰好饱和</dd></div>
+              <div class="sb-r"><dt>析出晶体的质量</dt><dd data-r="ppt">0.0 g</dd></div>
+              <div class="sb-r"><dt>溶质质量分数</dt><dd data-r="w">27.2%</dd></div>
+            </dl>
+          </div>
+        </div>
+        <div class="sb-acts">
+          <button type="button" class="sb-btn sb-btn-pri" data-solub-evap>恒温蒸发 10 g 水</button>
+          <button type="button" class="sb-btn" data-solub-reset>重置</button>
+        </div>
+        <p class="sb-note" id="solub-nacl-note">水最少剩 50 g。</p>
+      </div>
+    </section>
+
+    <section class="sb-sec" aria-labelledby="sb-h-more">
+      <div class="section-head">
+        <h2 id="sb-h-more">练一练</h2>
+        <span class="section-note">换几个情境，检验同样的想法</span>
+      </div>
+      <details class="qz-practice sb-practice" id="solub-practice">
+        <summary>理解测试（9 题）</summary>
+        <div class="sb-more" id="solub-more"></div>
+      </details>
+      <p class="sb-check-row"><a class="qz-check-link sb-check" href="../check.html?m=cb&amp;t=pre">做小测（前测 / 后测）→</a></p>
+    </section>
+  </main>
+
+  <footer class="footer">ABS-LAB · Authors: Wenzheng Wang · Hang Li</footer>
+
+  <script src="../shared/svgkit.js"></script>
+  <script src="../shared/quiz/core.js"></script>
+  <script src="../shared/quiz/engine.js"></script>
+  <script src="js/chem-models.js"></script>
+  <script src="js/solubility.js"></script>
+  <script src="../shared/linker.js" data-mode="lab" data-lab="solub"></script>
+</body>
+</html>

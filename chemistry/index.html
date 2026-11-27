@@ -47,6 +47,13 @@
         <div data-lk-lab="neut"></div>
         <div class="portal-foot"><span id="hub-neut">3 个互动探究任务</span><span>进入 →</span></div>
       </a>
+      <a class="portal-card" href="solubility.html">
+        <div class="portal-top"><div class="portal-icon">🧂</div><span class="badge badge-live">初中</span></div>
+        <h3>溶解度曲线</h3>
+        <p>拖动状态点降温、蒸发：看两个点怎样移动、析出多少晶体；两条曲线的交点意味着什么。</p>
+        <div data-lk-lab="solub"></div>
+        <div class="portal-foot"><span id="hub-solub">拖动 · 预测 · 看析出</span><span>进入 →</span></div>
+      </a>
       <div class="portal-card is-soon">
         <div class="portal-top"><div class="portal-icon">🔋</div><span class="badge badge-soon">规划中 · 高中</span></div>
         <h3>原电池与电子转移 <span class="en-sub">Galvanic Cell (Zn-Cu)</span></h3>
@@ -71,6 +78,8 @@
         if (el) el.textContent = m.marked ? "已掌握 " + (m.mastered || 0) + " · 已标 " + m.marked : "查看知识体系";
         var n = document.getElementById("hub-neut");
         if (n && s.chemDone) n.textContent = "已完成 " + s.chemDone + " / " + s.chemTotal;
+        var sb = document.getElementById("hub-solub");
+        if (sb) sb.textContent = s.solubDone ? "已完成 " + s.solubDone + " / " + (s.solubTotal || 3) : "拖动 · 预测 · 看析出";
       }
       window.addEventListener("abs-auth-changed", render);
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render); else render();
