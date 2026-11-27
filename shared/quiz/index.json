@@ -1,12 +1,279 @@
 {
  "v": 1,
  "files": [
+  "items/chemistry-cb.json",
+  "items/chemistry-cc.json",
   "items/math-demo.json",
   "items/math-m1.json",
+  "items/math-m2.json",
   "items/physics-pa.json",
   "items/physics-pe.json"
  ],
  "kps": {
+  "chemistry:u10-k10": [
+   {
+    "id": "c-cc-poe",
+    "type": "predict",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-baso4",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-co2",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-cacl2",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-excesscarb",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-mix",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-inv",
+    "type": "inverse",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u10-k6": [
+   {
+    "id": "c-cc-tt-phenol",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-little",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-mix",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u10-k7": [
+   {
+    "id": "c-cc-tt-nacl",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-cacl2",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-mix",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-inv",
+    "type": "inverse",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u10-k8": [
+   {
+    "id": "c-cc-tt-phenol",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-excesscarb",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-little",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u10-k9": [
+   {
+    "id": "c-cc-poe",
+    "type": "predict",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-baso4",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tt-co2",
+    "type": "twotier",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cc-tr-mix",
+    "type": "transfer",
+    "page": "chemistry/solute.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u9-k3": [
+   {
+    "id": "c-cb-tt-nocrystal",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-fridge",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tr-evap",
+    "type": "transfer",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u9-k4": [
+   {
+    "id": "c-cb-poe",
+    "type": "predict",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-percent",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-cross",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-cool2cross",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tr-nacl",
+    "type": "transfer",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-inv",
+    "type": "inverse",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u9-k5": [
+   {
+    "id": "c-cb-poe",
+    "type": "predict",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-nocrystal",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-fridge",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tr-nacl",
+    "type": "transfer",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tr-evap",
+    "type": "transfer",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-inv",
+    "type": "inverse",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   }
+  ],
+  "chemistry:u9-k6": [
+   {
+    "id": "c-cb-tt-percent",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-percent25",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-cross",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tt-cool2cross",
+    "type": "twotier",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   },
+   {
+    "id": "c-cb-tr-evap",
+    "type": "transfer",
+    "page": "chemistry/solubility.html",
+    "level": "junior"
+   }
+  ],
   "math:c22-2-2": [
    {
     "id": "m-dd-area-poe",
@@ -124,6 +391,98 @@
     "id": "m-m1-tr-speed",
     "type": "transfer",
     "page": "math/moving-point.html",
+    "level": "junior"
+   }
+  ],
+  "math:c26-2-2": [
+   {
+    "id": "m-m2-poe",
+    "type": "predict",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tt-shift",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tt-vertex",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tr-flip",
+    "type": "transfer",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-inv",
+    "type": "inverse",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   }
+  ],
+  "math:c26-2-4": [
+   {
+    "id": "m-m2-tt-interval",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tt-fence",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tr-flip",
+    "type": "transfer",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tr-wall",
+    "type": "transfer",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   }
+  ],
+  "math:c26-2-5": [
+   {
+    "id": "m-m2-tt-bup",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tt-bdown",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tr-flip",
+    "type": "transfer",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   }
+  ],
+  "math:c26-4-1": [
+   {
+    "id": "m-m2-tt-fence",
+    "type": "twotier",
+    "page": "math/quadratic.html",
+    "level": "junior"
+   },
+   {
+    "id": "m-m2-tr-wall",
+    "type": "transfer",
+    "page": "math/quadratic.html",
     "level": "junior"
    }
   ],
@@ -335,6 +694,267 @@
   ]
  },
  "items": {
+  "c-cb-poe": {
+   "subject": "chemistry",
+   "type": "predict",
+   "kp": [
+    "chemistry:u9-k4",
+    "chemistry:u9-k5"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": false,
+   "context": "降温时状态点的移动",
+   "module": "cb"
+  },
+  "c-cb-tt-percent": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k6",
+    "chemistry:u9-k4"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "由溶解度求质量分数",
+   "module": "cb"
+  },
+  "c-cb-tt-percent25": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k6"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "能不能配出",
+   "module": "cb"
+  },
+  "c-cb-tt-cross": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k4",
+    "chemistry:u9-k6"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "交点读图",
+   "module": "cb"
+  },
+  "c-cb-tt-cool2cross": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k4",
+    "chemistry:u9-k6"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "降温到交点温度",
+   "module": "cb"
+  },
+  "c-cb-tt-nocrystal": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k3",
+    "chemistry:u9-k5"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "状态点判断",
+   "module": "cb"
+  },
+  "c-cb-tt-fridge": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u9-k3",
+    "chemistry:u9-k5"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "放进冰箱",
+   "module": "cb"
+  },
+  "c-cb-tr-nacl": {
+   "subject": "chemistry",
+   "type": "transfer",
+   "kp": [
+    "chemistry:u9-k5",
+    "chemistry:u9-k4"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "换成 NaCl",
+   "module": "cb"
+  },
+  "c-cb-tr-evap": {
+   "subject": "chemistry",
+   "type": "transfer",
+   "kp": [
+    "chemistry:u9-k5",
+    "chemistry:u9-k3",
+    "chemistry:u9-k6"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "恒温蒸发",
+   "module": "cb"
+  },
+  "c-cb-inv": {
+   "subject": "chemistry",
+   "type": "inverse",
+   "kp": [
+    "chemistry:u9-k4",
+    "chemistry:u9-k5"
+   ],
+   "page": "chemistry/solubility.html",
+   "level": "junior",
+   "retest": true,
+   "context": "由析出量反推",
+   "module": "cb"
+  },
+  "c-cc-poe": {
+   "subject": "chemistry",
+   "type": "predict",
+   "kp": [
+    "chemistry:u10-k10",
+    "chemistry:u10-k9"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": false,
+   "context": "生成沉淀的中和",
+   "module": "cc"
+  },
+  "c-cc-tt-baso4": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k10",
+    "chemistry:u10-k9"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "沉淀（曲线取样）",
+   "module": "cc"
+  },
+  "c-cc-tt-co2": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k10",
+    "chemistry:u10-k9"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "生成气体",
+   "module": "cc"
+  },
+  "c-cc-tt-nacl": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k7"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "稀盐酸加 NaOH 恰好反应",
+   "module": "cc"
+  },
+  "c-cc-tt-cacl2": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k7",
+    "chemistry:u10-k10"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "石灰水加盐酸后蒸干",
+   "module": "cc"
+  },
+  "c-cc-tt-phenol": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k6",
+    "chemistry:u10-k8"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "直接滴酚酞检验变质",
+   "module": "cc"
+  },
+  "c-cc-tt-excesscarb": {
+   "subject": "chemistry",
+   "type": "twotier",
+   "kp": [
+    "chemistry:u10-k8",
+    "chemistry:u10-k10"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "Na₂CO₃ 滴过量后 pH > 7",
+   "module": "cc"
+  },
+  "c-cc-tr-little": {
+   "subject": "chemistry",
+   "type": "transfer",
+   "kp": [
+    "chemistry:u10-k6",
+    "chemistry:u10-k8"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "只滴几滴稀盐酸",
+   "module": "cc"
+  },
+  "c-cc-tr-mix": {
+   "subject": "chemistry",
+   "type": "transfer",
+   "kp": [
+    "chemistry:u10-k10",
+    "chemistry:u10-k6",
+    "chemistry:u10-k7",
+    "chemistry:u10-k9"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "混合溶液滴酸的气体图像",
+   "module": "cc"
+  },
+  "c-cc-inv": {
+   "subject": "chemistry",
+   "type": "inverse",
+   "kp": [
+    "chemistry:u10-k10",
+    "chemistry:u10-k7"
+   ],
+   "page": "chemistry/solute.html",
+   "level": "junior",
+   "retest": true,
+   "context": "由 pH 曲线反推",
+   "module": "cc"
+  },
   "m-dd-area-poe": {
    "subject": "math",
    "type": "predict",
@@ -507,6 +1127,130 @@
    "retest": true,
    "context": "由图象反推边长",
    "module": "m1"
+  },
+  "m-m2-poe": {
+   "subject": "math",
+   "type": "predict",
+   "kp": [
+    "math:c26-2-2"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": false,
+   "context": "平移与解析式",
+   "module": "m2"
+  },
+  "m-m2-tt-shift": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-2-2"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "由解析式看平移",
+   "module": "m2"
+  },
+  "m-m2-tt-vertex": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-2-2"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "读顶点坐标",
+   "module": "m2"
+  },
+  "m-m2-tt-interval": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-2-4"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "区间不含顶点",
+   "module": "m2"
+  },
+  "m-m2-tt-fence": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-4-1",
+    "math:c26-2-4"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "靠墙围菜园（墙长 8 m）",
+   "module": "m2"
+  },
+  "m-m2-tt-bup": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-2-5"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "开口向上读图",
+   "module": "m2"
+  },
+  "m-m2-tt-bdown": {
+   "subject": "math",
+   "type": "twotier",
+   "kp": [
+    "math:c26-2-5"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "开口向下读图",
+   "module": "m2"
+  },
+  "m-m2-tr-flip": {
+   "subject": "math",
+   "type": "transfer",
+   "kp": [
+    "math:c26-2-4",
+    "math:c26-2-2",
+    "math:c26-2-5"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "开口方向反过来",
+   "module": "m2"
+  },
+  "m-m2-tr-wall": {
+   "subject": "math",
+   "type": "transfer",
+   "kp": [
+    "math:c26-4-1",
+    "math:c26-2-4"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "墙变长（墙长 12 m）",
+   "module": "m2"
+  },
+  "m-m2-inv": {
+   "subject": "math",
+   "type": "inverse",
+   "kp": [
+    "math:c26-2-2"
+   ],
+   "page": "math/quadratic.html",
+   "level": "junior",
+   "retest": true,
+   "context": "由图象求解析式",
+   "module": "m2"
   },
   "p-pa-poe": {
    "subject": "physics",

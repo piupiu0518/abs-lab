@@ -6,7 +6,10 @@
     "hs-elec": { "name": "电流的微观本质", "page": "physics/hs-electricity.html", "subject": "physics" },
     "neut": { "name": "中和反应实验台", "page": "chemistry/neutralization.html", "subject": "chemistry" },
     "micro": { "name": "显微镜实验台", "page": "biology/microscope.html", "subject": "biology" },
-    "mpoint": { "name": "动点与函数图象", "page": "math/moving-point.html", "subject": "math" }
+    "mpoint": { "name": "动点与函数图象", "page": "math/moving-point.html", "subject": "math" },
+    "quad": { "name": "二次函数实验室", "page": "math/quadratic.html", "subject": "math" },
+    "solub": { "name": "溶解度曲线", "page": "chemistry/solubility.html", "subject": "chemistry" },
+    "solute": { "name": "反应后溶质成分", "page": "chemistry/solute.html", "subject": "chemistry" }
   },
   "targets": {
     "circuits-m1": { "lab": "circuits", "page": "physics/circuits-lab.html", "module": "m1", "no": 1, "title": "通路、断路、短路", "desc": "点开关，再用导线短接灯或电源，看哪种情况会烧坏电源。", "level": "junior", "where": "九年级 第十五章 第 2 节", "done": ["circuits_learned", "m1"] },
@@ -40,6 +43,13 @@
     "neut-jump": { "lab": "neut", "page": "chemistry/neutralization.html", "task": "jump", "title": "pH 变化曲线与恰好完全反应", "desc": "加到 20.0 mL 附近，看曲线经过 pH = 7、酚酞变色的那一刻。", "level": "junior", "where": "九年级下册 第十单元 课题 1、2", "done": ["chem_neut_tasks", "jump"], "note": "「滴定」「pH 突跃」是高中说法（选择性必修 1 第三章 第二节）；初中只要看懂曲线在 pH = 7 时恰好完全反应。" },
     "neut-indicator": { "lab": "neut", "page": "chemistry/neutralization.html", "task": "indicator", "title": "比较石蕊和甲基橙的变色范围", "desc": "切换紫色石蕊和甲基橙，对比它们在什么 pH 范围内变色。", "level": "senior", "where": "选择性必修 1 第三章 第二节", "done": ["chem_neut_tasks", "indicator"], "note": "初中只要求记住石蕊、酚酞遇酸、遇碱的颜色。" },
 
+    "solub-cool": { "lab": "solub", "page": "chemistry/solubility.html", "task": "cool", "title": "降温结晶：状态点怎样移动", "desc": "把溶有 80 g KNO₃ 的溶液从 60℃ 慢慢降温到 20℃，看两个点怎样移动、读数怎样变。", "level": "junior", "where": "九年级下册 溶液", "done": ["chem_solub_tasks", "cool"] },
+    "solub-compare": { "lab": "solub", "page": "chemistry/solubility.html", "task": "compare", "title": "两条溶解度曲线的交点", "desc": "把 KNO₃、NaCl 两份溶液调到交点温度，比较都饱和与不都饱和时的质量分数。", "level": "junior", "where": "九年级下册 溶液", "done": ["chem_solub_tasks", "compare"] },
+    "solub-nacl": { "lab": "solub", "page": "chemistry/solubility.html", "task": "nacl", "title": "NaCl 与蒸发结晶", "desc": "把 NaCl 饱和溶液降温，看析出多少；再恒温蒸发 10 g 水，比较两种结晶方法。", "level": "junior", "where": "九年级下册 溶液", "done": ["chem_solub_tasks", "nacl"] },
+
+    "solute-curve": { "lab": "solute", "page": "chemistry/solute.html", "task": "curve", "title": "在 pH 曲线上取样", "desc": "换四对试剂，沿 pH 曲线拖取样点，看恰好完全反应之前、之时、之后溶液里有哪些溶质。", "level": "junior", "where": "九年级下册 常见的酸、碱、盐", "done": ["chem_solute_tasks", "curve"] },
+    "solute-spoil": { "lab": "solute", "page": "chemistry/solute.html", "task": "spoil", "title": "氢氧化钠变质的探究", "desc": "给三份样品选试剂做实验，判断每一份是未变质、部分变质还是完全变质。", "level": "junior", "where": "九年级下册 常见的酸、碱、盐", "done": ["chem_solute_tasks", "spoil"] },
+
     "micro-focus_low": { "lab": "micro", "page": "biology/microscope.html", "task": "focus_low", "title": "低倍镜下找到并调清物像", "desc": "用 4× 或 10× 物镜，先转粗准焦螺旋找到洋葱表皮细胞，再用细准焦螺旋调清楚。", "level": "junior", "where": "七年级上册 第一单元 第二章 第一节", "done": ["bio_micro_tasks", "focus_low"] },
     "micro-high_mag": { "lab": "micro", "page": "biology/microscope.html", "task": "high_mag", "title": "换高倍物镜后调焦、调亮", "desc": "转到 40× 物镜，只用细准焦螺旋调清，再用大光圈或凹面镜把视野调亮。", "level": "junior", "where": "七年级上册 第一单元 第二章 第一节", "done": ["bio_micro_tasks", "high_mag"] },
     "micro-animal_cell": { "lab": "micro", "page": "biology/microscope.html", "task": "animal_cell", "title": "观察人口腔上皮细胞", "desc": "切换到人口腔上皮细胞并调清楚，和洋葱表皮细胞比较：没有细胞壁。", "level": "junior", "where": "七年级上册 第一单元 第二章 第三节", "done": ["bio_micro_tasks", "animal_cell"] },
@@ -47,7 +57,11 @@
 
     "mpoint-rect": { "lab": "mpoint", "page": "math/moving-point.html", "task": "rect", "title": "矩形上的动点与面积", "desc": "拖动 P 沿 B→C→D→A 走一圈，看面积 y 的图象在哪里拐弯。", "level": "junior", "where": "八年级下册 一次函数", "done": ["math_mpoint_tasks", "rect"] },
     "mpoint-pq": { "lab": "mpoint", "page": "math/moving-point.html", "task": "pq", "title": "两个动点与三角形面积", "desc": "P、Q 同时出发，先预测面积 y 怎样随时间 t 变化，再拖 P 看面积什么时候最大。", "level": "junior", "where": "九年级上册 二次函数", "done": ["math_mpoint_tasks", "pq"] },
-    "mpoint-time": { "lab": "mpoint", "page": "math/moving-point.html", "task": "time", "title": "变速动点：按时间画图", "desc": "P 在 BC、CD 上的速度不同，拖时间轴上的手柄，看拐点出现在哪个时刻。", "level": "junior", "where": "八年级下册 一次函数", "done": ["math_mpoint_tasks", "time"] }
+    "mpoint-time": { "lab": "mpoint", "page": "math/moving-point.html", "task": "time", "title": "变速动点：按时间画图", "desc": "P 在 BC、CD 上的速度不同，拖时间轴上的手柄，看拐点出现在哪个时刻。", "level": "junior", "where": "八年级下册 一次函数", "done": ["math_mpoint_tasks", "time"] },
+
+    "quad-vertex": { "lab": "quad", "page": "math/quadratic.html", "task": "vertex", "title": "顶点式与平移", "desc": "拖动顶点，看解析式括号里的符号和平移方向怎样对应。", "level": "junior", "where": "九年级上册 二次函数", "done": ["math_quad_tasks", "vertex"] },
+    "quad-interval": { "lab": "quad", "page": "math/quadratic.html", "task": "interval", "title": "区间上的最大值和最小值", "desc": "拖动 x 轴上的区间窗口，看对称轴在窗口左侧、里面、右侧时，最值各在哪里取到。", "level": "junior", "where": "九年级上册 二次函数", "done": ["math_quad_tasks", "interval"] },
+    "quad-abc": { "lab": "quad", "page": "math/quadratic.html", "task": "abc", "title": "a、b、c 的符号与图象", "desc": "调 a、b，看开口方向、对称轴在 y 轴哪一侧，以及图象与 y 轴的交点 (0, c)。", "level": "junior", "where": "九年级上册 二次函数", "done": ["math_quad_tasks", "abc"] }
   },
   "links": [
     { "kp": "physics:k1", "to": "circuits-m5", "note": "保持电阻两端的电压不变，换电阻、记电流，就是探究电流与电阻的关系。" },
@@ -102,8 +116,20 @@
     { "kp": "physics:toc-ch20-s5", "to": "circuits-m18" },
     { "kp": "physics:toc-ch20-s5", "to": "circuits-m21" },
 
+    { "kp": "chemistry:u9-k3", "to": "solub-cool", "note": "看状态点在曲线下方、曲线上、曲线上方时，读数里的「状态」各写什么。" },
+    { "kp": "chemistry:u9-k4", "to": "solub-cool", "note": "先读出 60℃ 时 KNO₃ 的溶解度，再慢慢降温，边拖边比较溶解度 S 和一共加入的 80 g。" },
+    { "kp": "chemistry:u9-k4", "to": "solub-compare", "note": "看两条曲线的交点：这个温度下 KNO₃ 和 NaCl 的溶解度相等。" },
+    { "kp": "chemistry:u9-k5", "to": "solub-cool", "note": "降温时盯住读数里的「析出晶体的质量」和小烧杯底部，看它们怎样变。" },
+    { "kp": "chemistry:u9-k5", "to": "solub-nacl", "note": "先降温，看 NaCl 析出多少；再点「恒温蒸发 10 g 水」，比较两种结晶方法。" },
+    { "kp": "chemistry:u9-k6", "to": "solub-compare", "note": "把两份溶液都调到交点温度，比较都饱和时和不都饱和时的质量分数。" },
+
     { "kp": "chemistry:u10-k7", "to": "neut-drip", "note": "中和反应的实质：H⁺ 与 OH⁻ 结合成水。" },
     { "kp": "chemistry:u10-k7", "to": "neut-jump", "note": "滴有酚酞时，颜色改变的那一刻就是恰好完全反应。" },
+    { "kp": "chemistry:u10-k7", "to": "solute-curve", "note": "选①或②，把取样点拖到 V = 20 mL，看 Na⁺ 和 Cl⁻ 还在不在。" },
+    { "kp": "chemistry:u10-k9", "to": "solute-curve", "note": "选③或④，沿曲线拖取样点，看复分解反应进行时小烧杯里的粒子和取样卡片上的溶质怎样变。" },
+    { "kp": "chemistry:u10-k10", "to": "solute-curve", "note": "沿曲线拖取样点，看恰好完全反应之前、之时、之后，取样卡片上的溶质怎样变。" },
+    { "kp": "chemistry:u10-k6", "to": "solute-spoil", "note": "先想好用哪几种试剂、按什么顺序加，再看每一步的现象能排除哪种情况。" },
+    { "kp": "chemistry:u10-k8", "to": "solute-spoil", "note": "先直接往三份样品里滴酚酞，看哪几份变红，再想一想为什么。" },
     { "kp": "chemistry:u10-k2", "to": "neut-jump", "note": "读 pH 变化曲线：看起点判断原溶液，看 pH = 7 判断恰好完全反应。" },
     { "kp": "chemistry:u10-k1", "to": "neut-jump", "note": "看酚酞在恰好完全反应前后的颜色。" },
     { "kp": "chemistry:u10-b1", "to": "neut-drip", "level": "senior", "note": "页面上的离子方程式 H⁺ + OH⁻ = H₂O 就是这里说的高中写法。" },
@@ -135,6 +161,11 @@
     { "kp": "math:c23-4-2", "to": "mpoint-rect", "note": "拖 P 走一圈，看 P 经过 C、D 时图象在哪里拐弯。" },
     { "kp": "math:c23-4-2", "to": "mpoint-time", "note": "横轴换成时间：看 P 到达 C 的那一刻，拐点落在 t 等于几。" },
     { "kp": "math:c26-1-1", "to": "mpoint-pq", "note": "先在预测关卡里选出你猜的图象，再拖 P，看函数板上画出的形状和你猜的一样吗。" },
-    { "kp": "math:c26-4-1", "to": "mpoint-pq", "note": "看面积什么时候最大：拖 P，注意那一刻 PB 和 BQ 有什么关系。" }
+    { "kp": "math:c26-4-1", "to": "mpoint-pq", "note": "看面积什么时候最大：拖 P，注意那一刻 PB 和 BQ 有什么关系。" },
+
+    { "kp": "math:c26-2-2", "to": "quad-vertex", "note": "先把顶点拖到 x = 2，看括号里写的是 x − 2 还是 x + 2。" },
+    { "kp": "math:c26-2-4", "to": "quad-interval", "note": "拖动区间窗口，先看对称轴在窗口的哪一侧，再看最小值、最大值落在哪里。" },
+    { "kp": "math:c26-4-1", "to": "quad-interval", "note": "有范围时最值不一定在顶点：把窗口拖到对称轴的一侧，看最大值、最小值落在哪个端点。" },
+    { "kp": "math:c26-2-5", "to": "quad-abc", "note": "先让 a > 0，把 b 从正调到负，看对称轴跑到 y 轴哪一侧；再把 a 换成负的试一次。" }
   ]
 }
