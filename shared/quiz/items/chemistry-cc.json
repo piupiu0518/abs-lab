@@ -1,0 +1,670 @@
+{
+  "v": 1,
+  "items": [
+    {
+      "id": "c-cc-poe",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k10",
+        "chemistry:u10-k9"
+      ],
+      "type": "predict",
+      "level": "junior",
+      "context": "生成沉淀的中和",
+      "retest": false,
+      "page": "chemistry/solute.html",
+      "widget": "cc-curve",
+      "stem": "往 Ba(OH)₂ 溶液里逐滴加入稀硫酸，生成白色沉淀 BaSO₄。先预测：恰好完全反应（pH = 7）时，溶液里还剩哪些离子？",
+      "ask": "选出你的预测",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "几乎没有离子了"
+          },
+          {
+            "id": "b",
+            "text": "还有 Ba²⁺ 和 SO₄²⁻",
+            "mc": "productalwayssolute"
+          },
+          {
+            "id": "c",
+            "text": "还有 H⁺ 和 OH⁻"
+          },
+          {
+            "id": "d",
+            "text": "和稀盐酸加 NaOH 一样，生成的盐的离子还在溶液里",
+            "mc": "productalwayssolute"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": null,
+      "confidence": true,
+      "explain": {
+        "prompt": "用一句话说一说：为什么这里和稀盐酸加 NaOH 不一样？",
+        "min": 6
+      },
+      "feedback": {
+        "ref": "Ba²⁺ 和 SO₄²⁻ 结合成 BaSO₄ 沉淀，离开了溶液；H⁺ 和 OH⁻ 结合成水。所以恰好完全反应时，溶液里几乎没有离子。稀盐酸加 NaOH 生成的 NaCl 能溶于水，Na⁺ 和 Cl⁻ 还留在溶液里。"
+      }
+    },
+    {
+      "id": "c-cc-tt-baso4",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k10",
+        "chemistry:u10-k9"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "沉淀（曲线取样）",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "往 Ba(OH)₂ 溶液里滴稀硫酸，pH 曲线如图。在曲线上 a 点取样（还没到恰好完全反应，pH > 7）。a 点溶液中的溶质是？",
+      "figures": [
+        {
+          "view": [0, 40, 0, 14],
+          "aspect": "fill",
+          "axes": {
+            "x": "V/mL",
+            "y": "pH",
+            "xt": [10, 20, 30, 40],
+            "yt": [7, 14]
+          },
+          "alt": "往 Ba(OH)₂ 溶液里滴稀硫酸的 pH 曲线，a 点在恰好完全反应之前",
+          "items": [
+            {
+              "t": "polyline",
+              "pts": [
+                [0, 13], [0.5, 12.9783], [1, 12.9565], [1.5, 12.9347], [2, 12.9128], [2.5, 12.8909],
+                [3, 12.8687], [3.5, 12.8464], [4, 12.8239], [4.5, 12.8012], [5, 12.7782], [5.5, 12.7548],
+                [6, 12.7312], [6.5, 12.7071], [7, 12.6826], [7.5, 12.6576], [8, 12.632], [8.5, 12.6059],
+                [9, 12.579], [9.5, 12.5514], [10, 12.5229], [10.5, 12.4934], [11, 12.4629], [11.5, 12.4311],
+                [12, 12.3979], [12.5, 12.3632], [13, 12.3266], [13.5, 12.2879], [14, 12.2467], [14.5, 12.2025],
+                [15, 12.1549], [15.5, 12.103], [16, 12.0458], [16.5, 11.9818], [17, 11.9089], [17.5, 11.8239],
+                [18, 11.7212], [18.5, 11.5906], [19, 11.4089], [19.5, 11.1024], [20, 7], [20.5, 2.9085],
+                [21, 2.6128], [21.5, 2.442], [22, 2.3222], [22.5, 2.2304], [23, 2.1563], [23.5, 2.0944],
+                [24, 2.0414], [24.5, 1.9951], [25, 1.9542], [25.5, 1.9176], [26, 1.8846], [26.5, 1.8545],
+                [27, 1.827], [27.5, 1.8016], [28, 1.7782], [28.5, 1.7563], [29, 1.736], [29.5, 1.7169],
+                [30, 1.699], [30.5, 1.6821], [31, 1.6662], [31.5, 1.6511], [32, 1.6368], [32.5, 1.6232],
+                [33, 1.6103], [33.5, 1.598], [34, 1.5863], [34.5, 1.575], [35, 1.5643], [35.5, 1.554],
+                [36, 1.5441], [36.5, 1.5346], [37, 1.5254], [37.5, 1.5166], [38, 1.5082], [38.5, 1.5],
+                [39, 1.4921], [39.5, 1.4845], [40, 1.4771]
+              ]
+            },
+            {
+              "t": "point",
+              "at": [10, 12.5229],
+              "label": "a",
+              "pos": "ne"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "Ba(OH)₂ 和 BaSO₄",
+            "mc": "productalwayssolute"
+          },
+          {
+            "id": "b",
+            "text": "BaSO₄",
+            "mc": "productalwayssolute"
+          },
+          {
+            "id": "c",
+            "text": "只有 Ba(OH)₂"
+          },
+          {
+            "id": "d",
+            "text": "H₂SO₄"
+          }
+        ],
+        "correct": "c"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "「生成物一定有，反应物可能有」，所以生成的 BaSO₄ 也是溶质",
+            "mc": "productalwayssolute"
+          },
+          {
+            "id": "r2",
+            "text": "BaSO₄ 是沉淀，不在溶液里；再看哪种反应物还有剩余"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "「生成物一定有」只对能溶于水的生成物成立。a 点 Ba(OH)₂ 还没反应完，溶液里的溶质只有它。"
+      }
+    },
+    {
+      "id": "c-cc-tt-co2",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k10",
+        "chemistry:u10-k9"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "生成气体",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "往稀盐酸里逐滴加入 Na₂CO₃ 溶液，有气泡产生。加到一半（盐酸还有剩余）时，溶液中的溶质是？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "NaCl、CO₂",
+            "mc": "productalwayssolute"
+          },
+          {
+            "id": "b",
+            "text": "NaCl、HCl"
+          },
+          {
+            "id": "c",
+            "text": "NaCl、Na₂CO₃"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "CO₂ 是气体，从溶液里跑出去了；再看哪种反应物还有剩余"
+          },
+          {
+            "id": "r2",
+            "text": "生成物一定都在溶液里",
+            "mc": "productalwayssolute"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "盐酸还有剩余，说明加进去的 Na₂CO₃ 都反应完了；溶质是生成的 NaCl 和剩余的 HCl。"
+      }
+    },
+    {
+      "id": "c-cc-tt-nacl",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k7"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "稀盐酸加 NaOH 恰好反应",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "稀盐酸和 NaOH 溶液恰好完全反应后，溶液里还有离子吗？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "有 Na⁺ 和 Cl⁻"
+          },
+          {
+            "id": "b",
+            "text": "没有离子，只剩水",
+            "mc": "neutralnoions"
+          },
+          {
+            "id": "c",
+            "text": "只有少量 H⁺ 和 OH⁻"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "恰好中和就是酸和碱都没了，所以溶液里只剩水",
+            "mc": "neutralnoions"
+          },
+          {
+            "id": "r2",
+            "text": "反应的实质是 H⁺ 和 OH⁻ 结合成水，Na⁺ 和 Cl⁻ 没有参加反应"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "恰好中和后得到的是 NaCl 溶液，Na⁺ 和 Cl⁻ 都还在。"
+      }
+    },
+    {
+      "id": "c-cc-tt-cacl2",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k7",
+        "chemistry:u10-k10"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "石灰水加盐酸后蒸干",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "澄清石灰水和稀盐酸恰好完全反应。把反应后的溶液蒸干，会留下什么？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "什么都不剩",
+            "mc": "neutralnoions"
+          },
+          {
+            "id": "b",
+            "text": "白色固体 CaCl₂"
+          },
+          {
+            "id": "c",
+            "text": "白色固体 Ca(OH)₂"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "生成的盐溶在水里，水蒸干以后它会留下来"
+          },
+          {
+            "id": "r2",
+            "text": "恰好中和后的溶液就是纯水",
+            "mc": "neutralnoions"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "Ca(OH)₂ + 2HCl = CaCl₂ + 2H₂O，CaCl₂ 能溶于水，蒸干后留下白色固体。"
+      }
+    },
+    {
+      "id": "c-cc-tt-phenol",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k6",
+        "chemistry:u10-k8"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "直接滴酚酞检验变质",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "一瓶久置的 NaOH 溶液，取样后直接滴入酚酞，溶液变红。能说明样品里还有 NaOH 吗？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "不能"
+          },
+          {
+            "id": "b",
+            "text": "能",
+            "mc": "carbonatebasic"
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "只有碱才能使酚酞变红",
+            "mc": "carbonatebasic"
+          },
+          {
+            "id": "r2",
+            "text": "变质生成的 Na₂CO₃，它的溶液也显碱性"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "要证明还有 NaOH，先加过量 CaCl₂ 溶液把 Na₂CO₃ 变成沉淀除去，再取上层清液滴酚酞。"
+      }
+    },
+    {
+      "id": "c-cc-tt-excesscarb",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k8",
+        "chemistry:u10-k10"
+      ],
+      "type": "twotier",
+      "level": "junior",
+      "context": "Na₂CO₃ 滴过量后 pH > 7",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "往稀盐酸里滴 Na₂CO₃ 溶液，滴过量以后 pH > 7。这时溶液显碱性，是因为溶液里有？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "NaOH",
+            "mc": "carbonatebasic"
+          },
+          {
+            "id": "b",
+            "text": "没反应完的 HCl"
+          },
+          {
+            "id": "c",
+            "text": "过量的 Na₂CO₃"
+          }
+        ],
+        "correct": "c"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "Na₂CO₃ 是盐，但它的溶液显碱性"
+          },
+          {
+            "id": "r2",
+            "text": "pH > 7 说明溶液里有碱",
+            "mc": "carbonatebasic"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "溶液显碱性，不等于溶液里有碱。这里的反应不会生成 NaOH。"
+      }
+    },
+    {
+      "id": "c-cc-tr-little",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k6",
+        "chemistry:u10-k8"
+      ],
+      "type": "transfer",
+      "level": "junior",
+      "context": "只滴几滴稀盐酸",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "检验 NaOH 溶液是否变质：加入足量稀盐酸，有气泡，说明已变质。如果只滴几滴稀盐酸，没有气泡，能说明没有变质吗？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "能",
+            "mc": "littleacid"
+          },
+          {
+            "id": "b",
+            "text": "不能"
+          }
+        ],
+        "correct": "b"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "只要有 Na₂CO₃，加盐酸就会马上冒气泡",
+            "mc": "littleacid"
+          },
+          {
+            "id": "r2",
+            "text": "溶液里如果还有 NaOH，几滴盐酸会先和 NaOH 反应"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "检验 Na₂CO₃ 要加足量的稀盐酸。"
+      }
+    },
+    {
+      "id": "c-cc-tr-mix",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k10",
+        "chemistry:u10-k6",
+        "chemistry:u10-k7",
+        "chemistry:u10-k9"
+      ],
+      "type": "transfer",
+      "level": "junior",
+      "context": "混合溶液滴酸的气体图像",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "向 NaOH 和 Na₂CO₃ 的混合溶液中逐滴加入稀盐酸。产生气体的质量随加入盐酸质量变化的图像是？",
+      "figures": [],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "开始一段没有气体，之后上升，最后不变",
+            "figure": {
+              "view": [0, 8, 0, 4.5],
+              "aspect": "fill",
+              "axes": {
+                "x": "盐酸的质量",
+                "y": "气体的质量",
+                "xt": [],
+                "yt": []
+              },
+              "items": [
+                {
+                  "t": "polyline",
+                  "pts": [[0, 0], [1, 0], [2, 0], [3, 0.5], [4, 1], [5, 1.5], [6, 2], [7, 2], [8, 2]]
+                }
+              ]
+            }
+          },
+          {
+            "id": "b",
+            "text": "从一开始就上升，最后不变",
+            "figure": {
+              "view": [0, 8, 0, 4.5],
+              "aspect": "fill",
+              "axes": {
+                "x": "盐酸的质量",
+                "y": "气体的质量",
+                "xt": [],
+                "yt": []
+              },
+              "items": [
+                {
+                  "t": "polyline",
+                  "pts": [[0, 0], [1, 0.5], [2, 1], [3, 1.5], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]]
+                }
+              ]
+            },
+            "mc": "littleacid"
+          },
+          {
+            "id": "c",
+            "text": "一直上升",
+            "figure": {
+              "view": [0, 8, 0, 4.5],
+              "aspect": "fill",
+              "axes": {
+                "x": "盐酸的质量",
+                "y": "气体的质量",
+                "xt": [],
+                "yt": []
+              },
+              "items": [
+                {
+                  "t": "polyline",
+                  "pts": [[0, 0], [1, 0.5], [2, 1], [3, 1.5], [4, 2], [5, 2.5], [6, 3], [7, 3.5], [8, 4]]
+                }
+              ]
+            }
+          }
+        ],
+        "correct": "a"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "盐酸先和 NaOH 反应，NaOH 反应完才和 Na₂CO₃ 反应放出 CO₂"
+          },
+          {
+            "id": "r2",
+            "text": "Na₂CO₃ 遇到盐酸马上放出 CO₂",
+            "mc": "littleacid"
+          }
+        ],
+        "correct": "r1"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "起点的那段平线，对应盐酸正在和 NaOH 反应；Na₂CO₃ 反应完以后，气体质量不再增加。"
+      }
+    },
+    {
+      "id": "c-cc-inv",
+      "subject": "chemistry",
+      "module": "cc",
+      "kp": [
+        "chemistry:u10-k10",
+        "chemistry:u10-k7"
+      ],
+      "type": "inverse",
+      "level": "junior",
+      "context": "由 pH 曲线反推",
+      "retest": true,
+      "page": "chemistry/solute.html",
+      "widget": null,
+      "stem": "如图是一条 pH 曲线：开始时 pH ≈ 13，随着滴入的液体增多，pH 逐渐减小，在加入 20 mL 时 pH = 7，最后约为 1.5。这是哪种操作？加入 30 mL 时（c 点）溶液中的溶质是？",
+      "figures": [
+        {
+          "view": [0, 40, 0, 14],
+          "aspect": "fill",
+          "axes": {
+            "x": "V/mL",
+            "y": "pH",
+            "xt": [10, 20, 30, 40],
+            "yt": [7, 14]
+          },
+          "alt": "pH 曲线：从 13 左右逐渐减小，20 mL 时 pH = 7，c 点在 30 mL 处",
+          "items": [
+            {
+              "t": "segment",
+              "a": [0, 7],
+              "b": [40, 7],
+              "color": "muted",
+              "dash": true
+            },
+            {
+              "t": "polyline",
+              "pts": [
+                [0, 13], [0.5, 12.9783], [1, 12.9565], [1.5, 12.9347], [2, 12.9128], [2.5, 12.8909],
+                [3, 12.8687], [3.5, 12.8464], [4, 12.8239], [4.5, 12.8012], [5, 12.7782], [5.5, 12.7548],
+                [6, 12.7312], [6.5, 12.7071], [7, 12.6826], [7.5, 12.6576], [8, 12.632], [8.5, 12.6059],
+                [9, 12.579], [9.5, 12.5514], [10, 12.5229], [10.5, 12.4934], [11, 12.4629], [11.5, 12.4311],
+                [12, 12.3979], [12.5, 12.3632], [13, 12.3266], [13.5, 12.2879], [14, 12.2467], [14.5, 12.2025],
+                [15, 12.1549], [15.5, 12.103], [16, 12.0458], [16.5, 11.9818], [17, 11.9089], [17.5, 11.8239],
+                [18, 11.7212], [18.5, 11.5906], [19, 11.4089], [19.5, 11.1024], [20, 7], [20.5, 2.9085],
+                [21, 2.6128], [21.5, 2.442], [22, 2.3222], [22.5, 2.2304], [23, 2.1563], [23.5, 2.0944],
+                [24, 2.0414], [24.5, 1.9951], [25, 1.9542], [25.5, 1.9176], [26, 1.8846], [26.5, 1.8545],
+                [27, 1.827], [27.5, 1.8016], [28, 1.7782], [28.5, 1.7563], [29, 1.736], [29.5, 1.7169],
+                [30, 1.699], [30.5, 1.6821], [31, 1.6662], [31.5, 1.6511], [32, 1.6368], [32.5, 1.6232],
+                [33, 1.6103], [33.5, 1.598], [34, 1.5863], [34.5, 1.575], [35, 1.5643], [35.5, 1.554],
+                [36, 1.5441], [36.5, 1.5346], [37, 1.5254], [37.5, 1.5166], [38, 1.5082], [38.5, 1.5],
+                [39, 1.4921], [39.5, 1.4845], [40, 1.4771]
+              ]
+            },
+            {
+              "t": "point",
+              "at": [30, 1.699],
+              "label": "c",
+              "pos": "ne"
+            }
+          ]
+        }
+      ],
+      "answer": {
+        "options": [
+          {
+            "id": "a",
+            "text": "往稀盐酸里滴 NaOH 溶液；c 点溶质是 NaCl 和 NaOH"
+          },
+          {
+            "id": "b",
+            "text": "往 NaOH 溶液里滴稀盐酸；c 点溶质只有 NaCl"
+          },
+          {
+            "id": "c",
+            "text": "往 NaOH 溶液里滴稀盐酸；c 点溶质是 NaCl 和 HCl"
+          }
+        ],
+        "correct": "c"
+      },
+      "reason": {
+        "options": [
+          {
+            "id": "r1",
+            "text": "c 点已经过了恰好完全反应，溶质只有生成的 NaCl"
+          },
+          {
+            "id": "r2",
+            "text": "起点 pH > 7 说明瓶里原来是碱；c 点 pH < 7，说明加入的盐酸过量"
+          }
+        ],
+        "correct": "r2"
+      },
+      "confidence": true,
+      "explain": null,
+      "feedback": {
+        "ref": "曲线就是试剂对②（往 NaOH 溶液里滴稀盐酸）。"
+      }
+    }
+  ]
+}

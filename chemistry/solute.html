@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>反应后溶质成分 · ABS-LAB</title>
+  <link rel="stylesheet" href="../shared/theme.css" />
+  <link rel="stylesheet" href="../shared/quiz/quiz.css" />
+  <script src="../shared/auth.js"></script>
+  <style>
+    /* 只管页面排版；pH 曲线由 svgkit 画，题目卡片的样子由 quiz.css 负责。类名一律 so- 开头。
+       视觉沿用中和反应实验台（卡片、图例、读数小块），但只用中文。
+       间距：flex 容器不用 gap（iOS 14.5、Chrome 84 以前不支持），改用子项外边距 + 容器负外边距；grid 的 gap 照用 */
+    .so-page { max-width: 1000px; }
+    .so-hero .hero-pill-btn { min-height: 44px; }
+
+    /* ---------- 标签页：两个情境，一次只显示一个（同动点页） ---------- */
+    .so-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+    .so-tab {
+      position: relative; min-width: 0; min-height: 52px; margin: 0; padding: 6px 6px 7px;
+      border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink);
+      font: inherit; line-height: 1.3; text-align: center; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .so-tab b { display: block; font-size: 0.94rem; }
+    .so-tab small { display: block; margin-top: 1px; font-size: 0.74rem; font-weight: 600; color: var(--muted); }
+    .so-tab[aria-selected="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); box-shadow: inset 0 -3px 0 var(--blue); }
+    .so-tab[aria-selected="true"] small { color: var(--blue); }
+    .so-tab:hover { border-color: var(--blue); }
+    /* 完成标记：小圆点贴在按钮右上角，不占文字的宽度 */
+    .so-ok {
+      display: none; position: absolute; top: -7px; right: -4px; width: 20px; height: 20px; border-radius: 50%;
+      background: var(--green); color: #fff; font-size: 0.72rem; font-weight: 700; line-height: 20px; text-align: center;
+    }
+    .so-tab.is-done .so-ok { display: block; }
+    .so-sr { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+    .so-tab:not(.is-done) .so-sr { display: none; }
+
+    /* ---------- 面板 ---------- */
+    .so-panel[hidden] { display: none !important; }
+    .so-lead { margin: 0 0 10px; color: var(--muted); font-size: 0.92rem; line-height: 1.55; }
+    .so-lead b { color: var(--ink); }
+    /* 「四对试剂都取样看看」：接在说明后面，同一行；四对都取样过（或任务早就完成）后藏起。
+       手机上一行放不下整句：还没取样完时先不写后半句「溶液里有哪些溶质？」（取样卡片上就写着溶质），
+       说明读作「拖 pH 曲线上的取样点，四对试剂都取样看看。」 */
+    .so-todo { margin-left: 0.3em; font-weight: 700; color: var(--ink); }
+    .so-todo[hidden] { display: none; }
+
+    /* ---------- 四对试剂：手机上两个一行，宽屏一行四个 ---------- */
+    .so-pairs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 8px; margin: 12px 0 10px; }
+    @media (min-width: 820px) { .so-pairs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .so-pair {
+      position: relative; min-width: 0; min-height: 48px; margin: 0; padding: 10px 6px 6px 12px;
+      border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); color: var(--ink);
+      font: inherit; font-size: 0.78rem; line-height: 1.35; text-align: left; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .so-pair:hover { border-color: var(--blue); }
+    .so-pair[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); box-shadow: inset 0 -3px 0 var(--blue); }
+    /* 编号像贴纸一样压在左上角的边框上，不占文字的宽度：390px 下每个按钮只有一百六十来 px，
+       「锥形瓶里是 Ba(OH)₂ 溶液，」「滴入稀硫酸」正好各占一行。按钮上边距 10px，编号压不到第一行字 */
+    .so-pair-no {
+      position: absolute; left: 4px; top: -10px; padding: 0 2px; border-radius: 50%; background: var(--surface);
+      color: var(--muted); font-size: 0.98rem; font-style: normal; font-weight: 700; line-height: 1;
+    }
+    .so-pair[aria-pressed="true"] .so-pair-no { color: var(--blue); }
+    /* 取样过的试剂对：右上角一个绿色 ✓（同标签页的完成标记） */
+    .so-pair .so-pair-ok {
+      display: none; position: absolute; top: -9px; right: -4px; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--green); color: #fff; font-size: 0.68rem; font-weight: 700; line-height: 18px; text-align: center;
+    }
+    .so-pair.is-sampled .so-pair-ok { display: block; }
+    .so-pair:not(.is-sampled) .so-sr { display: none; }
+    .so-pair > span { display: block; }
+    .so-pair b { font-weight: 700; white-space: nowrap; }
+
+    /* ---------- 题干、作答区（预测关卡，只在选③时出现） ---------- */
+    .so-qprompt:empty, .so-qans:empty { display: none; }
+    .so-qprompt { margin-bottom: 10px; }
+    .so-qans { margin-top: 12px; }
+    /* 选的不是③：题干、作答区、遮罩都藏起来，引擎里的状态原样保留，切回③接着做（同电学实验台 3 号的小灯泡模式） */
+    .so-gate-off .so-qprompt, .so-gate-off .so-qans, .so-gate-off .so-boards > .qz-lock { display: none !important; }
+
+    /* ---------- 模块图卡片（预测关卡的遮罩盖在这一整块上） ---------- */
+    .so-boards { padding: 10px 12px 12px; }
+    .so-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
+    @media (min-width: 820px) {
+      .so-grid { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); align-items: start; }
+    }
+    .so-main, .so-linked { min-width: 0; }
+    /* 读数行：阶段标签 + V + pH。项距用外边距：容器左移 8px，子项各右移 8px */
+    .so-read { display: flex; flex-wrap: wrap; align-items: center; margin: -4px 0 2px -8px; font-variant-numeric: tabular-nums; }
+    .so-read > * { margin: 4px 0 0 8px; }
+    .so-stage {
+      display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 0.84rem; font-weight: 700; line-height: 1.6;
+      background: var(--blue-soft); color: var(--blue); white-space: nowrap;
+    }
+    /* 文字用深一号的绿、橙（在浅底上对比度 ≥ 4.5 : 1），底色和曲线、图例同一套阶段色 */
+    .so-stage[data-stage="equiv"] { background: var(--green-soft); color: #0f7a57; }
+    .so-stage[data-stage="after"] { background: var(--coral-soft); color: #c2410c; }
+    .so-num { font-size: 0.95rem; font-weight: 700; color: var(--ink); white-space: nowrap; }
+    .so-num small { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    .so-cap { margin: 0 2px 2px; font-size: 0.8rem; line-height: 1.45; color: var(--muted); }
+    /* 图例：三段的颜色。单独一行，项距用外边距 */
+    .so-legend { display: flex; flex-wrap: wrap; align-items: center; margin: 0 0 2px -12px; padding: 0; list-style: none; font-size: 0.76rem; color: var(--muted); }
+    .so-legend li { display: inline-flex; align-items: center; margin: 2px 0 0 12px; white-space: nowrap; }
+    .so-lg { display: inline-block; flex: none; width: 14px; height: 4px; margin-right: 5px; border-radius: 2px; }
+    .so-lg-before { background: var(--blue); }
+    .so-lg-equiv { width: 9px; height: 9px; border-radius: 50%; background: var(--green); }
+    .so-lg-after { background: var(--coral); }
+    .so-board { position: relative; width: 100%; min-width: 0; }
+    /* 纵轴的刻度数字（7、14 和原点 O）往左挪 12px：取样点在 V = 0 时就在纵轴上，触控圈（半径 15px）不盖住它们 */
+    .so-board .sk-axes .sk-tick-t[text-anchor="end"] { -webkit-transform: translateX(-12px); transform: translateX(-12px); }
+    /* 手机上的横轴说明：放在画板右上角的上边距里（不占一行；宽屏用上面那行 .so-cap） */
+    .so-xcap { display: none; }
+    /* 板上的底色带：恰好完全反应之前 / 之后两段，颜色很淡，只用来分段 */
+    .so-board .so-band .sk-stroke { stroke: none; fill-opacity: 0.07; } /* 前缀 .so-board：压过 svgkit 后注入的 .sk-fillon 规则 */
+    .so-noptr { pointer-events: none; }
+
+    /* ---------- 联动：离子条形图 + 小烧杯 ---------- */
+    .so-lk-row { display: flex; align-items: flex-end; }
+    .so-ions { flex: 1 1 auto; min-width: 0; }
+    .so-sub { margin: 0 0 4px; font-size: 0.8rem; font-weight: 700; color: var(--ink); }
+    .so-sub small { font-weight: 600; color: var(--muted); }
+    .so-bars { display: flex; align-items: flex-end; margin: 0 0 0 -6px; }
+    .so-col { flex: 1 1 0; min-width: 0; margin-left: 6px; text-align: center; }
+    .so-cnt { display: block; font-size: 0.86rem; font-weight: 700; line-height: 1.3; color: var(--ink); font-variant-numeric: tabular-nums; }
+    .so-track { position: relative; height: 58px; border-radius: 6px 6px 0 0; background: var(--surface-soft); border-bottom: 2px solid var(--muted); overflow: hidden; }
+    /* 条的高度用 transform 改（拖动时不触发重排）；满格 = 40 个示意粒子，四对试剂用同一个比例尺，换试剂时能直接比 */
+    .so-fill { position: absolute; left: 3px; right: 3px; bottom: 0; height: 100%; border-radius: 4px 4px 0 0; transform-origin: 50% 100%; -webkit-transform: scaleY(0); transform: scaleY(0); }
+    .so-ion { display: block; margin-top: 3px; font-size: 0.84rem; font-weight: 700; line-height: 1.3; white-space: nowrap; }
+    .so-beaker { flex: none; width: 84px; margin-left: 10px; text-align: center; }
+    .so-beaker svg { display: block; width: 74px; height: 84px; margin: 0 auto; }
+    /* 宽屏：右栏有地方，条形图和烧杯放大一些 */
+    @media (min-width: 820px) {
+      .so-track { height: 120px; }
+      .so-beaker { width: 100px; }
+      .so-beaker svg { width: 92px; height: 104px; }
+    }
+    .so-bk-cap { margin: 2px 0 0; font-size: 0.74rem; font-weight: 600; line-height: 1.35; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .so-bk-cap[hidden] { display: none; }
+    .so-bk-cap b { color: var(--ink); }
+
+    /* ---------- 取样卡片 ---------- */
+    .so-sample { margin-top: 10px; padding: 8px 10px; border-radius: 10px; background: var(--sun-soft); border-left: 4px solid var(--sun); font-size: 0.86rem; line-height: 1.55; }
+    .so-sample p { margin: 0; }
+    .so-sample p + p { margin-top: 2px; }
+    .so-sample-h { font-weight: 700; color: var(--ink); }
+    .so-sample-v { font-size: 0.8rem; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+    .so-k { color: var(--muted); font-weight: 600; }
+    .so-solutes { font-weight: 700; color: var(--blue); }
+    .so-sample[data-empty="true"] .so-solutes { color: var(--green); }
+    .so-not { color: var(--ink); }
+    .so-note { color: var(--muted); }
+
+    /* 手机上上下排：预测之前联动区（条形图、烧杯、取样卡片）没有信息，却把预测选项挤到下面去。
+       锁定时先不显示它，选项紧跟在 pH 曲线下面；提交预测（解锁）后再出现。宽屏左右并排时不藏（遮罩一起盖住） */
+    @media (max-width: 819.98px) {
+      .so-boards.so-locked .so-linked { display: none; }
+    }
+    .so-boards.so-locked .so-read { visibility: hidden; }
+
+    /* ---------- spoil：变质探究 ---------- */
+    .so-card { padding: 10px 12px 12px; }
+    .so-card + .so-card { margin-top: 12px; }
+    .so-h3 { margin: 0 0 6px; font-size: 1rem; line-height: 1.4; }
+    .so-step { margin: 0 0 4px; font-size: 0.84rem; font-weight: 700; color: var(--muted); }
+    /* 按钮组：项距 8px（不用 gap） */
+    .so-btns { display: flex; flex-wrap: wrap; margin: -8px 0 0 -8px; }
+    .so-btns > button { margin: 8px 0 0 8px; }
+    .so-btn {
+      min-height: 44px; min-width: 64px; padding: 0 12px; border: 1.5px solid var(--line); border-radius: 10px;
+      background: var(--surface); color: var(--ink); font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .so-btn:hover { border-color: var(--blue); }
+    .so-btn[aria-pressed="true"] { border-color: var(--blue); background: var(--blue-soft); color: var(--blue); }
+    .so-btn:disabled { cursor: not-allowed; opacity: 0.45; }
+    .so-btn-main { border-color: var(--blue); background: var(--blue); color: #fff; }
+    .so-btn-main:hover { background: var(--blue-hover); }
+    .so-row + .so-row { margin-top: 10px; }
+    /* 四种试剂：手机上两个一行，宽屏一行四个 */
+    .so-reagents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+    @media (min-width: 820px) { .so-reagents { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+    .so-reagents .so-btn { width: 100%; min-width: 0; padding: 4px 8px; font-size: 0.86rem; line-height: 1.3; }
+    .so-hint { margin: 6px 0 0; min-height: 1.4em; font-size: 0.84rem; color: var(--muted); }
+    /* 当前试管的逐步现象 */
+    .so-log { margin: 8px 0 0; padding: 0 0 0 1.4em; font-size: 0.86rem; line-height: 1.55; color: var(--ink); }
+    .so-log:empty { display: none; }
+    .so-log b { color: var(--blue); }
+
+    /* 试管架：新试管排在最前面（离试剂按钮最近），做过的排在旁边 */
+    .so-rack { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 10px; }
+    .so-rack:empty { display: none; }
+    .tube { min-width: 0; margin: 0; padding: 6px 4px 6px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface); text-align: center; }
+    .tube.cur { border-color: var(--blue); box-shadow: 0 0 0 2px var(--blue-soft); }
+    .tube-tag { display: inline-block; min-width: 24px; padding: 0 6px; border-radius: 999px; background: var(--surface-soft); border: 1px solid var(--line); font-size: 0.8rem; font-weight: 700; line-height: 1.6; }
+    .tube.cur .tube-tag { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .tube svg { display: block; width: 46px; height: 108px; margin: 4px auto 2px; }
+    .tube-steps { margin: 0; font-size: 0.72rem; line-height: 1.35; color: var(--muted); min-height: 1.35em; }
+    .tube-obs { margin: 2px 0 0; font-size: 0.8rem; font-weight: 700; line-height: 1.35; color: var(--ink); }
+    /* 试管里的液体、沉淀、气泡（颜色只用主题变量） */
+    .tb-glass { fill: none; stroke: var(--muted); stroke-width: 2; }
+    .tb-liq { fill: var(--blue-soft); }
+    .tube[data-red="true"] .tb-liq { fill: #f9a8c9; }
+    .tb-ppt { fill: #fff; stroke: var(--light); stroke-width: 1; }
+    .tb-bub { fill: none; stroke: var(--blue); stroke-width: 1.3; }
+    @keyframes so-rise { 0% { -webkit-transform: translateY(0); transform: translateY(0); opacity: 1; } 100% { -webkit-transform: translateY(-26px); transform: translateY(-26px); opacity: 0; } }
+    .tube[data-bubbles="true"] .tb-bub { -webkit-animation: so-rise 1.6s ease-in infinite; animation: so-rise 1.6s ease-in infinite; }
+    .tube[data-bubbles="true"] .tb-bub:nth-child(2n) { -webkit-animation-delay: 0.5s; animation-delay: 0.5s; }
+    .tube[data-bubbles="true"] .tb-bub:nth-child(3n) { -webkit-animation-delay: 1s; animation-delay: 1s; }
+    @media (prefers-reduced-motion: reduce) { .tube .tb-bub { -webkit-animation: none !important; animation: none !important; } }
+
+    /* 下结论 */
+    .so-judges { margin: 0; padding: 0; list-style: none; }
+    .so-judge { display: flex; flex-wrap: wrap; align-items: center; margin: 0 0 0 -10px; }
+    .so-judge + .so-judge { margin-top: 8px; }
+    .so-judge > * { margin-left: 10px; }
+    .so-judge label { min-width: 4em; font-weight: 700; }
+    .so-judge select {
+      min-height: 44px; min-width: 9.5em; padding: 0 10px; border: 1.5px solid var(--line); border-radius: 10px;
+      background: var(--surface); color: var(--ink); font: inherit; font-size: 1rem; /* 16px：iOS Safari 点开小于 16px 的下拉框会自动放大页面 */
+    }
+    .so-fb { min-width: 0; font-size: 0.86rem; font-weight: 700; line-height: 1.45; }
+    .so-fb:empty { display: none; }
+    .so-fb[data-ok="true"] { color: #0f7a57; }   /* 现象只剩一种可能，就是选的那种 */
+    .so-fb[data-ok="false"] { color: #c2410c; }  /* 和看到的现象对不上 */
+    .so-fb[data-ok="wait"] { color: #92400e; }   /* 还分不出：再设计一步实验；或者还没选 */
+    .so-judge-foot { display: flex; flex-wrap: wrap; align-items: center; margin: 4px 0 0 -10px; }
+    .so-judge-foot > * { margin: 8px 0 0 10px; }
+    .so-all { font-size: 0.9rem; font-weight: 700; color: var(--green); }
+
+    /* ---------- 练一练 ---------- */
+    .so-sec { margin-top: 28px; }
+    .so-sec .section-head h2 { font-size: 1.12rem; }
+    .so-practice { border: 1.5px solid var(--line); border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); }
+    .so-practice > summary {
+      display: flex; align-items: center; min-height: 48px; padding: 0 16px; cursor: pointer; list-style: none;
+      font-weight: 700; color: var(--blue);
+    }
+    .so-practice > summary::-webkit-details-marker { display: none; }
+    .so-practice > summary::before { content: "▸"; margin-right: 8px; }
+    .so-practice[open] > summary::before { content: "▾"; }
+    .so-more { padding: 4px 12px 12px; min-width: 0; }
+    .so-load { margin: 0; padding: 12px 14px; border: 1.5px dashed var(--line); border-radius: 12px; color: var(--muted); font-size: 0.9rem; }
+    .so-check-row { margin: 12px 0 0; }
+    .so-check {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px;
+      border-radius: 10px; border: 1.5px solid var(--blue); background: var(--blue-soft); color: var(--blue);
+      font-weight: 700; text-decoration: none;
+    }
+    .so-check:hover { background: var(--surface); }
+
+    /* ---------- 页面底部：默认收起、标「高中」的小框 ---------- */
+    .hs-box { margin-top: 18px; border: 1.5px dashed var(--coral); border-radius: 12px; background: var(--surface); }
+    .hs-box > summary { display: flex; align-items: center; min-height: 44px; padding: 0 12px; cursor: pointer; list-style: none; font-size: 0.9rem; font-weight: 700; color: var(--muted); }
+    .hs-box > summary::-webkit-details-marker { display: none; }
+    .hs-box > summary::after { content: "▸"; margin-left: 8px; }
+    .hs-box[open] > summary::after { content: "▾"; }
+    .so-hs-tag { display: inline-block; margin-right: 8px; padding: 1px 8px; border-radius: 999px; background: var(--coral-soft); color: var(--coral); font-size: 0.78rem; font-weight: 700; }
+    .hs-box p { margin: 0; padding: 0 12px 12px; font-size: 0.9rem; line-height: 1.6; }
+
+    @media (max-width: 600px) {
+      .so-more { padding: 4px 6px 10px; }
+      /* 手机：横幅压成一行（标题 + 返回按钮），说明段落不显示（每个面板上方已有一行说明）；
+         这样打开页面时 pH 曲线、条形图和取样卡片尽量都在第一屏里，拖取样点时看得见联动 */
+      .so-hero { padding-top: 8px; padding-bottom: 8px; }
+      .so-hero p { display: none; }
+      .so-hero h1 { font-size: 1.15rem; }
+      .so-page { padding-top: 8px; }
+      .so-tabs { margin-bottom: 8px; }
+      .so-lead { margin-bottom: 6px; }
+      .so-lead.so-todo-on .so-lead-q { display: none; }
+      .so-lead.so-todo-on .so-todo { margin-left: 0; }
+      .so-lead.so-todo-on .so-todo::before { content: "，"; }
+      .so-pairs { margin: 11px 0 8px; }
+      .so-boards { padding: 6px 8px 10px; }
+      .so-card { padding: 10px 10px 12px; }
+      /* 横轴的说明在手机上不单占一行：改放在画板右上角（.so-xcap），纵轴名「pH」在左上角 */
+      .so-cap { display: none; }
+      .so-xcap {
+        display: block; position: absolute; top: 0; right: 2px; z-index: 1; margin: 0;
+        font-size: 0.74rem; font-weight: 600; line-height: 18px; color: var(--muted); white-space: nowrap; pointer-events: none;
+      }
+      .so-grid { gap: 8px; }
+      .so-sample { margin-top: 6px; }
+      /* 核对的反馈换到选项下面单独一行（「现在的现象还分不出……」放在下拉框旁边要折好几行） */
+      .so-fb { flex: 1 1 100%; margin-top: 4px; }
+    }
+  </style>
+</head>
+<body>
+  <script src="../shared/topbar.js" data-root=".." data-page="chemistry"></script>
+
+  <header class="hero-banner so-hero">
+    <div class="hero-inner">
+      <div>
+        <h1>反应后溶质成分</h1>
+        <p>换几对试剂，沿 pH 曲线取样：恰好完全反应之前、之时、之后，溶液里各有哪些溶质？再动手检验一瓶久置的 NaOH 溶液有没有变质。</p>
+      </div>
+      <a class="hero-pill-btn" href="index.html">← 返回化学</a>
+    </div>
+  </header>
+
+  <main class="container so-page">
+    <div class="so-tabs" role="tablist" aria-label="两个情境">
+      <button type="button" class="so-tab" role="tab" id="so-tab-curve" data-tab="curve" aria-controls="so-curve" aria-selected="true">
+        <b>换试剂 · 取样</b><small>在 pH 曲线上看溶质</small><span class="so-ok" aria-hidden="true">✓</span><span class="so-sr">（已完成）</span>
+      </button>
+      <button type="button" class="so-tab" role="tab" id="so-tab-spoil" data-tab="spoil" aria-controls="so-spoil" aria-selected="false" tabindex="-1">
+        <b>NaOH 变质探究</b><small>加试剂、下结论</small><span class="so-ok" aria-hidden="true">✓</span><span class="so-sr">（已完成）</span>
+      </button>
+    </div>
+
+    <!-- 情境 curve：四对试剂、pH 曲线上取样。data-task 写在源码里：build-index 和 linker.js 都按它找任务。
+         选③时挂预测关卡 c-cc-poe（部件 cc-curve）：题干在 #qz-curve-prompt，遮罩盖 #solute-curve-boards，作答区在 #qz-curve-ans -->
+    <section class="so-panel so-gate-off" id="so-curve" data-task="curve" role="tabpanel" aria-labelledby="so-tab-curve">
+      <p class="so-lead" id="solute-lead">拖 pH 曲线上的<b>取样点</b><span class="so-lead-q">：溶液里有哪些溶质？</span><span class="so-todo" id="solute-todo">四对试剂都取样看看。</span></p>
+      <div class="so-pairs" role="group" aria-label="四对试剂">
+        <button type="button" class="so-pair" data-pair="1" aria-pressed="true"><i class="so-pair-no">①</i><span>锥形瓶里是<b>稀盐酸</b>，</span><span>滴入 <b>NaOH 溶液</b></span><span class="so-pair-ok" aria-hidden="true">✓</span><span class="so-sr">（已取样）</span></button>
+        <button type="button" class="so-pair" data-pair="2" aria-pressed="false"><i class="so-pair-no">②</i><span>锥形瓶里是 <b>NaOH 溶液</b>，</span><span>滴入<b>稀盐酸</b></span><span class="so-pair-ok" aria-hidden="true">✓</span><span class="so-sr">（已取样）</span></button>
+        <button type="button" class="so-pair" data-pair="3" aria-pressed="false"><i class="so-pair-no">③</i><span>锥形瓶里是 <b>Ba(OH)₂ 溶液</b>，</span><span>滴入<b>稀硫酸</b></span><span class="so-pair-ok" aria-hidden="true">✓</span><span class="so-sr">（已取样）</span></button>
+        <button type="button" class="so-pair" data-pair="4" aria-pressed="false"><i class="so-pair-no">④</i><span>锥形瓶里是<b>稀盐酸</b>，</span><span>滴入 <b>Na₂CO₃ 溶液</b></span><span class="so-pair-ok" aria-hidden="true">✓</span><span class="so-sr">（已取样）</span></button>
+      </div>
+      <div class="so-qprompt" id="qz-curve-prompt"></div>
+      <div class="card so-boards" id="solute-curve-boards">
+        <div class="so-grid">
+          <div class="so-main">
+            <div class="so-read" aria-live="off">
+              <span class="so-stage" id="solute-stage" data-stage="before">恰好完全反应之前</span>
+              <span class="so-num">V = <span id="solute-v">0.0</span> <small>mL</small></span>
+              <span class="so-num">pH = <span id="solute-ph">1.00</span> <small id="solute-nature">酸性</small></span>
+            </div>
+            <ul class="so-legend" aria-label="图例">
+              <li><i class="so-lg so-lg-before"></i>恰好完全反应之前</li>
+              <li><i class="so-lg so-lg-equiv"></i>恰好完全反应（20 mL）</li>
+              <li><i class="so-lg so-lg-after"></i>之后</li>
+            </ul>
+            <p class="so-cap">横轴：滴入体积 V / mL　纵轴：pH（曲线只画到取样点）</p>
+            <div class="so-board" id="solute-ph-board"><p class="so-xcap">横轴：滴入体积 V / mL</p></div>
+          </div>
+          <div class="so-linked">
+            <div class="so-lk-row">
+              <div class="so-ions">
+                <p class="so-sub">溶液里的离子 <small>（示意粒子数）</small></p>
+                <div class="so-bars" id="solute-bars"></div>
+              </div>
+              <div class="so-beaker" id="solute-beaker">
+                <svg viewBox="0 0 92 104" aria-hidden="true" focusable="false"></svg>
+                <p class="so-bk-cap" data-solid="BaSO₄" data-n="0" hidden>沉淀 BaSO₄：<b>0</b></p>
+                <p class="so-bk-cap" data-gas="CO₂" data-n="0" hidden>放出 CO₂：<b>0</b></p>
+                <p class="so-bk-cap" data-none hidden>没有沉淀，也没有气体</p>
+              </div>
+            </div>
+            <div class="so-sample" id="solute-sample" data-empty="false">
+              <p><span class="so-sample-h">取样</span> <small class="so-sample-v">V = <span id="solute-sample-v">0.0</span> mL</small>　<span class="so-k">溶质：</span><span class="so-solutes" id="solute-solutes">HCl</span></p>
+              <p><span class="so-k">不算溶质：</span><span class="so-not" id="solute-not">还没有生成物</span></p>
+              <p class="so-note" id="solute-note">还没滴入 NaOH 溶液。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="so-qans" id="qz-curve-ans"></div>
+    </section>
+
+    <!-- 情境 spoil：NaOH 变质探究。三份样品随机对应未变质 / 部分变质 / 完全变质 -->
+    <section class="so-panel" id="so-spoil" data-task="spoil" role="tabpanel" aria-labelledby="so-tab-spoil" hidden>
+      <p class="so-lead">三份样品 A、B、C：一份<b>未变质</b>、一份<b>部分变质</b>、一份<b>完全变质</b>。取样做实验，判断哪份是哪种。</p>
+      <div class="card so-card" id="solute-lab">
+        <div class="so-row">
+          <p class="so-step" id="so-pick-lab">① 选一份样品，取到新试管里</p>
+          <div class="so-btns" role="group" aria-labelledby="so-pick-lab">
+            <button type="button" class="so-btn" data-sample="A" aria-pressed="true">样品 A</button>
+            <button type="button" class="so-btn" data-sample="B" aria-pressed="false">样品 B</button>
+            <button type="button" class="so-btn" data-sample="C" aria-pressed="false">样品 C</button>
+            <button type="button" class="so-btn so-btn-main" data-tube-new>取样到新试管</button>
+          </div>
+        </div>
+        <div class="so-row">
+          <p class="so-step" id="so-add-lab">② 往这支试管里依次加试剂（最多 3 步）</p>
+          <div class="so-reagents" role="group" aria-labelledby="so-add-lab">
+            <button type="button" class="so-btn" data-reagent="acid" disabled>足量稀盐酸</button>
+            <button type="button" class="so-btn" data-reagent="phenol" disabled>酚酞溶液</button>
+            <button type="button" class="so-btn" data-reagent="cacl2" disabled>过量 CaCl₂ 溶液</button>
+            <button type="button" class="so-btn" data-reagent="lime" disabled>澄清石灰水</button>
+          </div>
+          <p class="so-hint" id="so-hint" aria-live="polite">先点「取样到新试管」。</p>
+          <ol class="so-log" id="so-log" aria-label="这支试管的现象"></ol>
+        </div>
+        <div class="so-rack" id="so-rack" aria-label="试管架"></div>
+      </div>
+
+      <div class="card so-card" id="solute-judge">
+        <h3 class="so-h3">③ 下结论</h3>
+        <ul class="so-judges">
+          <li class="so-judge"><label for="so-j-A">样品 A</label><select id="so-j-A" data-judge="A"><option value="">请选择</option><option value="none">未变质</option><option value="partial">部分变质</option><option value="full">完全变质</option></select><span class="so-fb" data-fb="A" aria-live="polite"></span></li>
+          <li class="so-judge"><label for="so-j-B">样品 B</label><select id="so-j-B" data-judge="B"><option value="">请选择</option><option value="none">未变质</option><option value="partial">部分变质</option><option value="full">完全变质</option></select><span class="so-fb" data-fb="B" aria-live="polite"></span></li>
+          <li class="so-judge"><label for="so-j-C">样品 C</label><select id="so-j-C" data-judge="C"><option value="">请选择</option><option value="none">未变质</option><option value="partial">部分变质</option><option value="full">完全变质</option></select><span class="so-fb" data-fb="C" aria-live="polite"></span></li>
+        </ul>
+        <div class="so-judge-foot">
+          <button type="button" class="so-btn so-btn-main" data-judge-check>核对</button>
+          <button type="button" class="so-btn" data-reshuffle>换一组样品</button>
+          <span class="so-all" id="so-all" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="so-sec" aria-labelledby="so-h-more">
+      <div class="section-head">
+        <h2 id="so-h-more">练一练</h2>
+        <span class="section-note">换几个情境，检验同样的想法</span>
+      </div>
+      <details class="qz-practice so-practice" id="so-practice">
+        <summary>理解测试（9 题）</summary>
+        <div class="so-more" id="so-more"></div>
+      </details>
+      <p class="so-check-row"><a class="qz-check-link so-check" href="../check.html?m=cc&amp;t=pre">做小测（前测 / 后测）→</a></p>
+    </section>
+
+    <!-- SPEC 6.4：页面底部默认收起、标「高中」的小框，只写一句 -->
+    <details class="hs-box" id="so-hs">
+      <summary><span class="so-hs-tag">高中</span>拓展一句</summary>
+      <p>几滴稀盐酸滴进 Na₂CO₃ 溶液时，先生成 NaHCO₃，不会马上冒气泡（高中必修第一册）</p>
+    </details>
+  </main>
+
+  <footer class="footer">ABS-LAB · Authors: Wenzheng Wang · Hang Li</footer>
+
+  <script src="../shared/svgkit.js"></script>
+  <script src="../shared/quiz/core.js"></script>
+  <script src="../shared/quiz/engine.js"></script>
+  <script src="js/chem-models.js"></script>
+  <script src="js/solute.js"></script>
+  <script src="../shared/linker.js" data-mode="lab" data-lab="solute"></script>
+</body>
+</html>

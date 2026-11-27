@@ -54,6 +54,13 @@
         <div data-lk-lab="solub"></div>
         <div class="portal-foot"><span id="hub-solub">拖动 · 预测 · 看析出</span><span>进入 →</span></div>
       </a>
+      <a class="portal-card" href="solute.html">
+        <div class="portal-top"><div class="portal-icon coral">🧪</div><span class="badge badge-live">初中</span></div>
+        <h3>反应后溶质成分</h3>
+        <p>换几对试剂，在 pH 曲线上取样，看溶液里还剩什么；再动手探究 NaOH 有没有变质。</p>
+        <div data-lk-lab="solute"></div>
+        <div class="portal-foot"><span id="hub-solute">取样 · 预测 · 探究</span><span>进入 →</span></div>
+      </a>
       <div class="portal-card is-soon">
         <div class="portal-top"><div class="portal-icon">🔋</div><span class="badge badge-soon">规划中 · 高中</span></div>
         <h3>原电池与电子转移 <span class="en-sub">Galvanic Cell (Zn-Cu)</span></h3>
@@ -80,6 +87,8 @@
         if (n && s.chemDone) n.textContent = "已完成 " + s.chemDone + " / " + s.chemTotal;
         var sb = document.getElementById("hub-solub");
         if (sb) sb.textContent = s.solubDone ? "已完成 " + s.solubDone + " / " + (s.solubTotal || 3) : "拖动 · 预测 · 看析出";
+        var su = document.getElementById("hub-solute");
+        if (su) su.textContent = s.soluteDone ? "已完成 " + s.soluteDone + " / " + (s.soluteTotal || 2) : "取样 · 预测 · 探究";
       }
       window.addEventListener("abs-auth-changed", render);
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", render); else render();

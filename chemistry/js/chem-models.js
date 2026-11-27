@@ -247,6 +247,40 @@
     t.steps.push({ reagent: reagent, bubbles: bubbles, precipitate: precipitate, red: red, text: text });
     return { tube: t, bubbles: bubbles, precipitate: precipitate, red: red, text: text };
   }
+  // 由看到的现象推断样品（「证据够了才算对」）：把这份样品做过的每支试管（试剂顺序 + 每一步看到的现象），
+  // 按同样的试剂顺序分别套到三种情况上，只留下每一步现象（气泡、白色沉淀、变红）都完全一致的情况。
+  // tubes: [{ steps: [{ reagent, bubbles, precipitate, red }] }]（页面上 addReagent 记下的 tube.steps 就是这个形状）。
+  // 一支试管都没做（或只取样没加试剂）时三种情况都留下
+  var SAMPLE_ORDER = ["none", "partial", "full"];
+  function consistentSamples(tubes) {
+    return SAMPLE_ORDER.filter(function (smp) {
+      return (tubes || []).every(function (tb) {
+        var steps = (tb && tb.steps) || [];
+        var sim = runSequence(smp, steps.map(function (x) { return x.reagent; })).steps;
+        if (sim.length !== steps.length) return false;
+        for (var i = 0; i < sim.length; i++) {
+          var o = steps[i], r = sim[i];
+          if (r.bubbles !== !!o.bubbles || r.precipitate !== !!o.precipitate || r.red !== !!o.red) return false;
+        }
+        return true;
+      });
+    });
+  }
+  // 「A」和「B」、「A」「B」和「C」
+  function quoteList(list) {
+    var q = list.map(function (k) { return "「" + SAMPLE_NAME[k] + "」"; });
+    return q.length > 1 ? q.slice(0, -1).join("") + "和" + q[q.length - 1] : q.join("");
+  }
+  // 核对一份样品：只根据学生自己看到的现象给反馈，不会泄露答案
+  //   correct：现象只剩一种可能，并且就是学生选的；
+  //   contradicted：学生选的那种已经被现象排除；
+  //   ambiguous：学生选的那种还在，但现象还分不出两三种情况（包括一支试管都没做）
+  function judgeSample(tubes, choice) {
+    var left = consistentSamples(tubes);
+    if (left.indexOf(choice) === -1) return { status: "contradicted", remaining: left, text: "和你看到的现象对不上" };
+    if (left.length === 1) return { status: "correct", remaining: left, text: "✓ 现象只能是「" + SAMPLE_NAME[choice] + "」" };
+    return { status: "ambiguous", remaining: left, text: "现在的现象还分不出" + quoteList(left) + "，再设计一步实验" };
+  }
   // NaOH 和 Na₂CO₃ 的混合溶液里逐滴加入稀盐酸：盐酸先和 NaOH 反应（NaOH + HCl = NaCl + H₂O），
   // NaOH 反应完才和 Na₂CO₃ 反应放出 CO₂（Na₂CO₃ + 2HCl = 2NaCl + H₂O + CO₂↑，初中按一步写）。
   // acid、naoh、co3 用同一种「份数」（不出现单位）；返回已放出的 CO₂ 份数
@@ -277,6 +311,7 @@
     pairState: pairState, phCurve: phCurve,
     SAMPLES: SAMPLES, SAMPLE_NAME: SAMPLE_NAME, REAGENTS: REAGENTS,
     newTube: newTube, addReagent: addReagent, isRed: isRed, runSequence: runSequence,
-    mixGas: mixGas, mixGasCurve: mixGasCurve
+    mixGas: mixGas, mixGasCurve: mixGasCurve,
+    consistentSamples: consistentSamples, judgeSample: judgeSample
   };
 });
