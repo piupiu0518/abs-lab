@@ -85,20 +85,30 @@ NEW_PAGES = ("math/demo-poe.html", "math/svgkit-demo.html", "review.html")
 # 第 1 批 A 按任务书第 6.6 节新增了 7 条关联：物理 k4 → circuits-m3、k6 → circuits-m13（+2），
 # 数学 c23-4-2 → mpoint-rect / mpoint-time、c22-2-2 → mpoint-rect、c26-1-1 → mpoint-pq、c26-4-1 → mpoint-pq（+5）；
 # 第 0 批时物理 47 / 48、数学 7。其余学科不变。
+# 第 1 批 B 又新增了 15 条关联（任务书 1B 第 7.2 节）：数学 +4（c26-2-2、c26-2-4、c26-4-1、c26-2-5 → quad-*），
+# 化学 +11（u9-k3～k6 → solub-*、u10-k6～k10 → solute-*）；第 1 批 A 之后是化学 4 / 7、数学 12
 BASELINE = {
     "physics": {"default": 49, "hs": 50},
-    "chemistry": {"default": 4, "hs": 7},
-    "math": {"default": 12, "hs": None},
+    "chemistry": {"default": 15, "hs": 18},
+    "math": {"default": 16, "hs": None},
     "biology": {"default": 13, "hs": None},
 }
 # 有测试题的知识点（第 1 批 A 起物理也有：physics-pa.json、physics-pe.json）
 QUIZ_CHIPS = {
-    "math": ["math:c22-2-2", "math:c23-4-2", "math:c26-1-1"],
+    "math": ["math:c22-2-2", "math:c23-4-2", "math:c26-1-1",
+             # 第 1 批 B：math-m2.json
+             "math:c26-2-2", "math:c26-2-4", "math:c26-2-5", "math:c26-4-1"],
     "physics": ["physics:e2", "physics:k3", "physics:k4", "physics:k6", "physics:k7", "physics:k8", "physics:k10"],
-    "chemistry": [], "biology": [],
+    # 第 1 批 B：chemistry-cb.json、chemistry-cc.json
+    "chemistry": ["chemistry:u9-k3", "chemistry:u9-k4", "chemistry:u9-k5", "chemistry:u9-k6",
+                  "chemistry:u10-k6", "chemistry:u10-k7", "chemistry:u10-k8", "chemistry:u10-k9", "chemistry:u10-k10"],
+    "biology": [],
 }
 # 测试标签链到这个知识点在题库里的第一道题所在的页面（题库文件按文件名排序：math-demo.json 在 math-m1.json 前面）
-QUIZ_PAGES = {"math:c22-2-2": "math/demo-poe.html", "math:c23-4-2": "math/demo-poe.html", "math:c26-1-1": "math/moving-point.html"}
+QUIZ_PAGES = {"math:c22-2-2": "math/demo-poe.html", "math:c23-4-2": "math/demo-poe.html", "math:c26-1-1": "math/moving-point.html",
+              # 第 1 批 B：这四个知识点的第一道题都在 math-m2.json 里
+              "math:c26-2-2": "math/quadratic.html", "math:c26-2-4": "math/quadratic.html",
+              "math:c26-2-5": "math/quadratic.html", "math:c26-4-1": "math/quadratic.html"}
 
 # 拖动路线 B→C→D（世界坐标），P 必须一直在这条折线上
 POLY = [(0.0, 0.0), (6.0, 0.0), (6.0, 4.0)]

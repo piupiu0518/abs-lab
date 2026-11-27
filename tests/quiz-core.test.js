@@ -876,7 +876,8 @@ describe("dueList / nextDue：到期列表", function () {
   it("只列来自测试、未掌握、due ≤ 今天的条目；按到期日再按 key 排", function () {
     var out = core.dueList(list, D, LIB, ITEMS);
     assert.deepEqual(out.map(function (x) { return x.key; }), ["vertexismax", "graphaspath", "q:" + TT.id, "zzunknowntag"]);
-    assert.deepEqual(out[0], { key: "vertexismax", kind: "tag", mistakeId: "mc-vertexismax", name: "顶点一定是最值", stable: true, due: plus(-1), step: 2, subject: "math" });
+    // 名称取标签库里的 name（第 1 批 B 按任务书把 vertexismax 的名称改成了「顶点处一定取到最值」）
+    assert.deepEqual(out[0], { key: "vertexismax", kind: "tag", mistakeId: "mc-vertexismax", name: "顶点处一定取到最值", stable: true, due: plus(-1), step: 2, subject: "math" });
     assert.equal(out[1].name, "图象即轨迹");
     assert.equal(out[2].kind, "item");
     assert.equal(out[2].mistakeId, "qz-mddsttwotier");

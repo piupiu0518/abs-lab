@@ -78,11 +78,12 @@ OFFLINE_PAGES = [
     "math/moving-point.html", "physics/circuits-lab.html#3", "physics/circuits-lab.html#13", "check.html?m=pa&t=pre",
 ]
 
-# 导图标签数（任务书第 8 节：1280×900、游客、只数可见的、不含 data-kind="quiz"；第 1 批 A 之后的预期值）
+# 导图标签数（任务书第 8 节：1280×900、游客、只数可见的、不含 data-kind="quiz"）。
+# 第 1 批 A 之后是物理 49 / 50、化学 4 / 7、数学 12；第 1 批 B 新增的关联（任务书 1B 第 7.2 节）让数学 +4、化学 +11
 BASELINE = {
     "physics": {"default": 49, "hs": 50},
-    "chemistry": {"default": 4, "hs": 7},
-    "math": {"default": 12, "hs": None},
+    "chemistry": {"default": 15, "hs": 18},
+    "math": {"default": 16, "hs": None},
     "biology": {"default": 13, "hs": None},
 }
 # 任务书 6.6 节新增的关联：知识点 → 实验 target
