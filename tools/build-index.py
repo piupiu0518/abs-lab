@@ -58,7 +58,7 @@ TAG_RE = re.compile(r"^[a-z][a-z0-9]{5,31}$")
 QUIZ_TYPES = ("predict", "twotier", "transfer", "inverse")
 QUIZ_LEVELS = ("junior", "senior")
 
-# 模块完整性检查的名单：模块代号（题目的 module 字段）→ 名称（只用在报错文字里）。1B 再往里加。
+# 模块完整性检查的名单：模块代号（题目的 module 字段）→ 名称（只用在报错文字里）。新模块上线时往里加。
 MODULE_RULES = {
     "pa": "电学实验台 3 号 · 小灯泡",
     "pe": "电学实验台 13 号 · 传感器",

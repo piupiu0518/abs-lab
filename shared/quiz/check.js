@@ -1,7 +1,7 @@
 /* ABS-LAB 理解小测（check.html）→ 测试钩子 window.__check
  *
  * 用途：给一个班做前测、后测，比较正确率和「有把握却答错」的比例怎么变（任务书第 3.2 节）。
- *   地址 check.html?m=pa|pe|m1&t=pre|post。模块不认识：列出三个模块让人选；t 不认识：让人选前测还是后测。
+ *   地址 check.html?m=pa|pe|m1|m2|cb|cc&t=pre|post（模块名单见下面的 MODS）。模块不认识：列出全部模块让人选；t 不认识：让人选前测还是后测。
  *   出题：该模块全部 retest: true 的题，按题库顺序（二段式、迁移、逆向；预测关卡不出）。
  *
  * 为什么不用引擎的 mount：mount 每答一题就判定、给反馈、写记录（登录时还调接口、写错题本）。
@@ -359,7 +359,7 @@
     return "";
   }
 
-  // 模块不认识：列出三个模块
+  // 模块不认识：列出全部模块（MODS）
   function showChooser(tHint) {
     var st = readStore();
     var list = h("ul", { cls: "ck-mods" });

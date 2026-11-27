@@ -138,13 +138,15 @@ abs-lab/
 │       ├── check.js              # 理解小测页（check.html）的脚本
 │       ├── misconceptions.json   # 错误概念标签库
 │       ├── index.json            # 知识点 → 题目（脚本生成）
-│       └── items/                # 题库，一个学科或模块一个文件（math-demo.json 示范题；physics-pa / physics-pe / math-m1：第 1 批 A）
+│       └── items/                # 题库，一个学科或模块一个文件（math-demo.json 示范题；physics-pa / physics-pe / math-m1：第 1 批 A；
+│                                 #   math-m2 / chemistry-cb / chemistry-cc：第 1 批 B）
 ├── math/                         # 📐 数学（学科页 index.html、知识导图、示范题 demo-poe.html、画板自测页 svgkit-demo.html、
-│                                 #   动点与函数图象 moving-point.html；js/moving-point-model.js 是它的几何模型）
+│                                 #   动点与函数图象 moving-point.html、二次函数实验室 quadratic.html；js/*-model.js 是它们的模型）
 ├── physics/                      # ⚡ 物理（学科页、知识导图、电学实验台、电流的微观本质；js/sensor-models.js 是电学实验台 3、13 号的模型）
-├── chemistry/                    # 🧪 化学（学科页、知识导图、中和反应实验台）
+├── chemistry/                    # 🧪 化学（学科页、知识导图、中和反应实验台、溶解度曲线 solubility.html、反应后溶质成分 solute.html；
+│                                 #   js/chem-models.js 是这两页的模型）
 ├── biology/                      # 🧬 生物（学科页、知识导图、显微镜实验台与标本图）
-├── tests/                        # node --test tests/（单元测试）；e2e_batch0.py、e2e_batch1a.py（端到端，Playwright）
+├── tests/                        # node --test tests/（单元测试）；e2e_batch0.py、e2e_batch1a.py、e2e_batch1b.py（端到端，Playwright）
 ├── tools/
 │   ├── sync-maps.py              # 把项目里的知识导图同步成网站公开版
 │   ├── build-index.py            # 生成搜索索引和题库索引，检查关联表和题库（导图、关联表、题库改动后运行）
@@ -228,7 +230,7 @@ abs-lab/
 - 静态图（题图、选项缩略图）用声明式写法，由 `ABSLabSVG.figure` 画：
   `{ "view": [xmin, xmax, ymin, ymax], "aspect": "fill" | "equal", "axes": { "x": "x", "y": "y", "xt": [6, 10], "yt": [12] } 或 null, "items": [ {"t":"polyline","pts":[[0,0],[6,12]]}, {"t":"polygon","pts":[…],"fill":false}, {"t":"segment","a":[0,0],"b":[6,0],"dash":true}, {"t":"point","at":[2,0],"label":"P"}, {"t":"text","at":[0,4],"s":"A","pos":"nw"} ] }`；线条可加 `"dash": true`、`"accent": true`。
 - **同一个错误概念至少配两道不同情境（context）的题**：两道都答成错误概念才标「稳定迷思」。从第 1 批起 `build-index.py` 对此报错（第 0 批只报警告）。
-- **模块完整性**：`tools/build-index.py` 顶部的 `MODULE_RULES` 列出的模块（现在是 `pa`、`pe`、`m1`），每个至少 1 道预测关卡（predict）、6 道二段式题（twotier，每道至少有一个答案或理由选项带 `mc` 标签）、2 道迁移题（transfer）、1 道逆向题（inverse），不够就报错。新模块上线时把它加进这个常量。
+- **模块完整性**：`tools/build-index.py` 顶部的 `MODULE_RULES` 列出的模块（现在是 `pa`、`pe`、`m1`、`m2`、`cb`、`cc`），每个至少 1 道预测关卡（predict）、6 道二段式题（twotier，每道至少有一个答案或理由选项带 `mc` 标签）、2 道迁移题（transfer）、1 道逆向题（inverse），不够就报错。新模块上线时把它加进这个常量。
 - **正确选项的位置**（同样只查 `MODULE_RULES` 里的模块）：按题库顺序，正确答案排在同一个位置的题不超过一半（题数是奇数时向上取整，例如 9 道二选一的理由最多 5 道同位），也不能连续 3 道落在同一个位置；正确理由同样检查。不满足就报错。
 
 错误概念标签库 `shared/quiz/misconceptions.json`：
@@ -315,18 +317,20 @@ ABSLabQuiz.mount(answerEl, { items: ["p-pa-poe"], mode: "poe", promptHost: promp
 ### 6. 测试
 
 ```bash
-node --test tests/                 # 单元测试（判定、排期、选题、交错、掌握门槛、几何函数、第 1 批 A 的模型和题目数值）
+node --test tests/                 # 单元测试（判定、排期、选题、交错、掌握门槛、几何函数、第 1 批 A / B 的模型和题目数值）
 python3 tools/build-index.py --check
 python3 tests/e2e_batch0.py        # 端到端（需要 Playwright；自己启动 dev-server 8090）
 python3 tests/e2e_batch1a.py       # 第 1 批 A 的端到端（自己启动 dev-server 8092）
+python3 tests/e2e_batch1b.py       # 第 1 批 B 的端到端（自己启动 dev-server 8093）
 ```
 
 - `tests/batch1a-content.test.js`：用模型函数（`physics/js/sensor-models.js`、`math/js/moving-point-model.js`）把第 1 批 A 每道题里的数值、正确选项、缩略图折线点重新算一遍，和题库对上；改题库或模型以后先跑它。
+- `tests/batch1b-content.test.js`：同样做法核对第 1 批 B 的三个题库（`math/js/quadratic-model.js`、`chemistry/js/chem-models.js`）；`tests/quadratic-model.test.js`、`tests/chem-models.test.js` 是这两个模型自己的测试（溶解度插值、析出量、试剂对粒子数守恒、变质规则和 judgeSample）。
 - Python Playwright 要和本机浏览器的版本对得上（例如预装的是 Node Playwright 1.63 带的浏览器，就装 `pip install playwright==1.63.0`），否则 `chromium.launch()` 找不到浏览器。
 
 ### 7. 理解小测（`check.html`）
 
-给一个班做前测、后测，比较正确率和「有把握却答错」的比例怎么变。地址 `check.html?m=pa|pe|m1&t=pre|post`（缺 m 或 t 时页面让人选）。
+给一个班做前测、后测，比较正确率和「有把握却答错」的比例怎么变。地址 `check.html?m=pa|pe|m1|m2|cb|cc&t=pre|post`（缺 m 或 t 时页面让人选；模块名单是 `shared/quiz/check.js` 里的 `MODS`，新模块上线时加进去）。
 
 - 按题库顺序出这个模块全部 `retest: true` 的题（二段式、迁移、逆向；不出预测关卡），一屏一题，作答时不给反馈、不标对错；可以退回去改。
 - 不需要登录，不调 `api/quiz`、`api/mistakes`，不写错题本：只读题库，作答只存本机 `localStorage["abslab.check.v1"]`（`runs[模块][pre|post]`，另有没做完的草稿）。顶栏脚本带 `data-no-visit`，这一页不记「访问过」。
@@ -345,6 +349,21 @@ python3 tests/e2e_batch1a.py       # 第 1 批 A 的端到端（自己启动 dev
 - 电学实验台只在第一次打开 3 号或 13 号模块时才加载 `quiz.css`、`sensor-models.js`、`svgkit.js`、`core.js`、`engine.js`；打开别的模块一个都不多下载。3 号的「定值电阻 R₀」模式、13 号的风速仪仍走原来的代码，读数和改动前逐字一致（风速仪的式子在 `sensor-models.js` 里也有一份 `windState`，端到端测试用它核对页面）。
 - 每个模块下面有可折叠的「理解测试（9 题）」（练一练）和「做小测（前测 / 后测）→」链接；深链 `circuits-lab.html#qz-<题目 id>` 会打开对应模块（预测关卡切到对应模式，其他题展开练一练）。
 - 测试钩子（只给端到端测试用）：电学实验台 `window.__lab`（`assets()`、`m3()`、`m13()`），动点页 `window.__mp`，小测页 `window.__check`。
+
+### 9. 第 1 批 B 的模块
+
+| 模块 | 在哪里 | 模型 | 题库（module） | 预测关卡（部件 id） |
+| --- | --- | --- | --- | --- |
+| M2 二次函数实验室 | `math/quadratic.html`（情境 vertex 顶点式与平移、interval 区间最值、abc a、b、c 与图象；进度键 `math_quad_tasks`） | `math/js/quadratic-model.js` | `math-m2.json`（m2） | 外部部件 `m2-vertex` |
+| C-B 溶解度曲线 | `chemistry/solubility.html`（情境 cool 降温结晶、compare 两条曲线与交点、nacl NaCl 与蒸发结晶；进度键 `chem_solub_tasks`） | `chemistry/js/chem-models.js`（溶解度表 + 单调三次插值、state、coolPath…） | `chemistry-cb.json`（cb） | 外部部件 `cb-state` |
+| C-C 反应后溶质成分 | `chemistry/solute.html`（情境 curve 换试剂、曲线取样，spoil NaOH 变质探究；进度键 `chem_solute_tasks`） | `chemistry/js/chem-models.js`（pairState、phCurve、变质规则、judgeSample…） | `chemistry-cc.json`（cc） | 外部部件 `cc-curve` |
+
+- 三个页面的结构照「动点与函数图象」：标签页切换情境（`section[data-task]`），`?task=` 打开对应情境，`#qz-<题目 id>` 定位到题；页面下方是练一练和「做小测（前测 / 后测）→」。
+- 化学页只写初中说法：浓度只写「稀盐酸」「NaOH 溶液」和体积，离子数量用「示意粒子数」（1 个粒子 = 0.1 mmol，只在代码里换算）；pH 的算法、浓度只在 `chem-models.js` 里用。高中内容只出现在溶质页底部默认收起、标「高中」的小框里。
+- 溶解度页：空心的「状态点」是一共加入的溶质（按每 100 g 水算），曲线上的实心点是溶液实际组成；两点之间的虚线旁写「析出 x g」（cool、compare，100 g 水）或「每 100 g 水多 x g」（nacl，水会蒸发），实际析出质量看读数和小烧杯。
+- 变质探究的「核对」按「证据够了才算对」：`ABSLabChem.judgeSample` 把这份样品做过的每支试管按同样的试剂顺序套到三种情况上，只留下现象一致的；只剩一种且和选的相同才是 ✓，被现象排除时提示「和你看到的现象对不上」，还剩两三种时提示再设计一步实验。
+- 中和反应实验台的任务卡片下面有一张「下一步」卡片，链到溶质页。
+- 测试钩子：二次函数页 `window.__quad`，溶解度页 `window.__solub`，溶质页 `window.__solute`。
 
 ---
 
